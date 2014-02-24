@@ -14,7 +14,7 @@ import java.sql.ResultSet;
  String, update(book) : String, update(book,#) :
  String, delete(book) und select (title) : Book an.
  */
-public class MySQLBookDAO implements IBookDAO {
+public class Persistence implements IBookDAO {
     private Connection databaseConnection;
     private PreparedStatement preparedStatement = null;
 
@@ -33,7 +33,7 @@ public class MySQLBookDAO implements IBookDAO {
                 preparedStatement = databaseConnection.prepareStatement(insertSQLStatement);
                 preparedStatement.setString(1,book.getUuid());
                 preparedStatement.setString(2,book.getTitle());
-                preparedStatement.setString(3,book.getQuantity());
+                preparedStatement.setInt(3,book.getQuantity());
                 preparedStatement.execute();
             } else {
                 System.out.println("book " + book.getTitle() + " exists");
@@ -55,7 +55,7 @@ public class MySQLBookDAO implements IBookDAO {
                 databaseConnection.setAutoCommit(false);
                 preparedStatement = databaseConnection.prepareStatement(updateSQLStatement);
                 preparedStatement.setString(1,book.getTitle());
-                preparedStatement.setString(2,book.getQuantity());
+                preparedStatement.setInt(2,book.getQuantity());
                 preparedStatement.setString(3,book.getUuid());
                 preparedStatement.execute();
                 databaseConnection.commit();
@@ -121,7 +121,7 @@ public class MySQLBookDAO implements IBookDAO {
             if (resultSet.next() && resultSet != null) {
                 service = new Book(resultSet.getString(1),
                         resultSet.getString(2),
-                        resultSet.getString(3));
+                        resultSet.getInt(3));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

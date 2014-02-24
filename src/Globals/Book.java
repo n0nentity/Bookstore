@@ -7,7 +7,7 @@ import java.util.UUID;
  * Book ist charakteristiert durch uuid,title, quantity
  */
 public class Book {
-    public Book(String uuid, String title, String quantity) {
+    public Book(String uuid, String title, int quantity) {
         this.uuid = uuid;
         this.title = title;
         this.quantity = quantity;
@@ -31,15 +31,15 @@ public class Book {
         this.title = title;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
     private String uuid = null;
     private String title;
-    private String quantity;
+    private int quantity;
 }
