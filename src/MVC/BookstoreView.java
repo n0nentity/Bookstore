@@ -10,16 +10,15 @@ public class BookstoreView extends JFrame {
 
     private JTextField userInputTextField = new JTextField(5);
     private JTextField totalTextField = new JTextField(20);
-    private JButton multiplyButton = new JButton("Multiply");
-    private JButton clearButton = new JButton("Clear");
+    private JButton requestButton = new JButton("Request");
 
     private BookstoreModel model;
 
     public BookstoreView(BookstoreModel model) {
         this.model = model;
-        this.model.setTotal(INITIAL_VALUE);
+        this.model.setRequestResult(INITIAL_VALUE);
 
-        totalTextField.setText(model.getTotal());
+        totalTextField.setText(model.getRequestResult());
         totalTextField.setEditable(false);
 
         JPanel content = new JPanel();
@@ -28,17 +27,15 @@ public class BookstoreView extends JFrame {
         content.add(new JLabel("Input : "));
         content.add(userInputTextField);
 
-        content.add(multiplyButton);
+        content.add(requestButton);
         content.add(new JLabel("Total : "));
 
         content.add(totalTextField);
 
-        content.add(clearButton);
-
         this.setContentPane(content);
         this.pack();
 
-        this.setTitle("Simple Calc - MVC");
+        this.setTitle("Simple Bookstore - MVC");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
@@ -59,11 +56,7 @@ public class BookstoreView extends JFrame {
         JOptionPane.showMessageDialog(this,errorMessage);
     }
 
-    public void addMultiplyListener(ActionListener multiplyActionListener) {
-        multiplyButton.addActionListener(multiplyActionListener);
-    }
-
-    public void addClearListener(ActionListener clearActionListener) {
-        clearButton.addActionListener(clearActionListener);
+    public void addRequestListener(ActionListener multiplyActionListener) {
+        requestButton.addActionListener(multiplyActionListener);
     }
 }

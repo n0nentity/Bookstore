@@ -10,27 +10,19 @@ public class BookstoreController {
     public BookstoreController(BookstoreModel model, BookstoreView view) {
         this.model = model;
         this.view = view;
-        this.view.addMultiplyListener(new MultiplyListener());
-        this.view.addClearListener(new ClearListener());
+        this.view.addRequestListener(new RequestListener());
     }
 
-    private class MultiplyListener implements ActionListener {
+    private class RequestListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String userInput = "";
             try {
                 userInput = view.getUserInput();
-                model.multiplyBy(userInput);
-                view.setTotal(model.getTotal());
+                model.request(userInput);
+                view.setTotal(model.getRequestResult());
             } catch (NumberFormatException nfex) {
                 view.showError("invalid input : '" + userInput + "'");
             }
-        }
-    }
-
-    private class ClearListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            model.reset();
-            view.reset();
         }
     }
 }
