@@ -2,10 +2,10 @@
 <java version="1.7.0_09" class="java.beans.XMLDecoder">
  <object class="Globals.Settings">
       <void property="databaseHost">
-       <string>localhost</string>
+       <string>db516629543.db.1and1.com</string>
       </void>
      <void property="databaseName">
-         <string>bookstore</string>
+         <string>db516629543</string>
      </void>
      <void property="databasePort">
          <int>8080</int>
@@ -14,10 +14,10 @@
          <string>MySQL</string>
      </void>
      <void property="databaseUser">
-         <string>root</string>
+         <string>dbo516629543</string>
      </void>
      <void property="databasePasswordEncrypted">
-         <string></string>
+         <string>Initial1</string>
      </void>
  </object>
 </java>
