@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_09" class="java.beans.XMLDecoder">
+ <object class="Globals.Settings">
+      <void property="databaseHost">
+       <string>localhost</string>
+      </void>
+     <void property="databaseName">
+         <string>bookstore</string>
+     </void>
+     <void property="databasePort">
+         <int>8080</int>
+     </void>
+     <void property="databaseType">
+         <string>MySQL</string>
+     </void>
+     <void property="databaseUser">
+         <string>root</string>
+     </void>
+     <void property="databasePasswordEncrypted">
+         <string></string>
+     </void>
+ </object>
+</java>
