@@ -1,4 +1,4 @@
-package Globals;
+package Settings;
 
 import java.beans.XMLEncoder;
 import java.beans.XMLDecoder;

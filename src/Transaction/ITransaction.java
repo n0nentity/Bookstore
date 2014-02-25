@@ -1,6 +1,4 @@
-package Memento;
-
-import Globals.Book;
+package Transaction;
 
 public interface ITransaction {
     public IPreviousTransactionToCareTaker backupLastTransaction();

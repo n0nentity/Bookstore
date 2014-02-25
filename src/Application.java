@@ -1,5 +1,4 @@
-import Globals.Settings;
-import Globals.SettingsHandler;
+import Settings.SettingsHandler;
 
 /**
  * Created by HeierMi on 24.02.14.

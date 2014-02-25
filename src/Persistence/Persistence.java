@@ -1,4 +1,4 @@
-package DAO;
+package Persistence;
 
 import Database.MySQL;
 import Globals.Book;

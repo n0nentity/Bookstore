@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="1.7.0_09" class="java.beans.XMLDecoder">
- <object class="Globals.Settings">
+ <object class="Settings.Settings">
       <void property="databaseHost">
        <string>db516629543.db.1and1.com</string>
       </void>

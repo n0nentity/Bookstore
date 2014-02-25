@@ -1,7 +1,6 @@
 package Database;
 
-import Globals.Settings;
-import Globals.SettingsHandler;
+import Settings.SettingsHandler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

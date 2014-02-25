@@ -1,4 +1,4 @@
-package Globals;
+package SoftwareRepository;
 
 /**
  * Created by HeierMi on 24.02.14.

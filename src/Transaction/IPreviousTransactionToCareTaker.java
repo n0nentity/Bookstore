@@ -1,4 +1,4 @@
-package Memento;
+package Transaction;
 
 public interface IPreviousTransactionToCareTaker {
 }
