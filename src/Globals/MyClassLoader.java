@@ -63,8 +63,13 @@ public class MyClassLoader extends java.lang.ClassLoader {
             byte[] classData = null;
             //searching for the class
             for(Map.Entry<String,ByteArrayOutputStream> e : hmBuffer.entrySet()){
-                if(e.getKey().equals(className+".class"))
-                classData = e.getValue().toByteArray();
+
+                if(e.getKey().contains(className.substring(0, className.indexOf("."))+".class")) {
+                    String name = e.getKey().substring(e.getKey().lastIndexOf("/")+1, e.getKey().indexOf("."));
+                    className = name + "." + name;
+
+                    classData = e.getValue().toByteArray();
+                }
             }
             return defineClass(className,classData,0,classData.length);
         } catch (ClassFormatError e) { e.printStackTrace();}
@@ -75,19 +80,35 @@ public class MyClassLoader extends java.lang.ClassLoader {
 
     private ArrayList<Class> loadClasses(HashMap<String, ByteArrayOutputStream> hmBuffer) throws ClassNotFoundException{
         ArrayList<Class> result = new ArrayList<Class>();
-        try {
-            byte[] classData = null;
-            //searching for the class
-            for(Map.Entry<String,ByteArrayOutputStream> e : hmBuffer.entrySet()){
-                if(e.getKey().endsWith(".class")) {
-                    classData = e.getValue().toByteArray();
-                    result.add(defineClass(e.getKey().substring(0, e.getKey().indexOf(".")), classData, 0, classData.length));
+        if (hmBuffer != null) {
+            try {
+                byte[] classData = null;
+                //searching for the class
+                for(Map.Entry<String,ByteArrayOutputStream> e : hmBuffer.entrySet()){
+                    if(e.getKey().endsWith(".class")) {
+                        classData = e.getValue().toByteArray();
+                        try {
+                            String name = e.getKey().substring(e.getKey().lastIndexOf("/")+1, e.getKey().indexOf("."));
+                            name = name + "." + name;
+                            /*
+                            String name = e.getKey();
+                            */
+                            /*
+                            String name = e.getKey().substring(0, e.getKey().indexOf("."));
+                            */
+                            Class c = defineClass(name, classData, 0, classData.length);
+                            result.add(c);
+                        }
+                        catch (Exception ex) {
+
+                        }
+                    }
                 }
             }
-        } catch (ClassFormatError e) { e.printStackTrace();}
-        catch (NullPointerException e) { e.printStackTrace();}
-
-        throw new ClassNotFoundException();
+            catch (ClassFormatError e) { e.printStackTrace();}
+            catch (NullPointerException e) { e.printStackTrace();}
+        }
+        return result;
     }
       
     public static ArrayList<Class> loadClassesFromJar(String path) {
@@ -98,7 +119,9 @@ public class MyClassLoader extends java.lang.ClassLoader {
             //HashMap of classes from .jar
             hm = MyClassLoader.unzipJar(path);
         }
-        catch (IOException e){ e.printStackTrace(); }
+        catch (IOException e){
+            e.printStackTrace();
+        }
 
         try {
             //Getting the Class
@@ -162,7 +185,9 @@ public class MyClassLoader extends java.lang.ClassLoader {
             java.lang.ClassLoader parentClassLoader = MyClassLoader.class.getClassLoader();
             MyClassLoader myClassLoader = new MyClassLoader(parentClassLoader);
 
-            Class serviceClass = myClassLoader.loadClass(className,hm);
+            //Class serviceClass = myClassLoader.loadClass(className,hm);
+            Class serviceClass = myClassLoader.loadClass(className, hm);
+
             //Getting the method
             Object serviceObject = serviceClass.newInstance();
             //Parameter types

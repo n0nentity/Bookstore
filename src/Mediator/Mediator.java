@@ -35,7 +35,7 @@ public class Mediator {
     public String request(String request) {
         String response = null;
 
-        HashMap<String,MethodLink> searchResults = methodLinkRepository.getMethodLinkSearch().search(request);
+        HashMap<String,MethodLink> searchResults = methodLinkRepository.getMethodLinkSearch().search(request.substring(0, request.indexOf("(")));
 
         if (searchResults != null && searchResults.size() == 1) {
             // parse and interpret
@@ -90,9 +90,9 @@ public class Mediator {
                     JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
                     if (method != null) {
                         if (softwareRepoParaTypes == null)
-                            MyClassLoader.methodFromJar(method.getPath(), method.getMethod().toString(), method.getMethod().getName());
+                            MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName());
                         else
-                            MyClassLoader.methodFromJar(method.getPath(), method.getMethod().toString(), method.getMethod().getName(), softwareRepoParaTypes, softwareRepoParaValues);
+                            MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName(), softwareRepoParaTypes, softwareRepoParaValues);
                     }
                 }
             }

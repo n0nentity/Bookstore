@@ -23,7 +23,7 @@ public class SoftwareRepository implements IDirectoryObserver {
 
     private IDirectoryPublisher IPublisher;
     private HashMap<String, JarMethodLink> methods = new HashMap<String, JarMethodLink>();
-    private String libPath = "C:\\Temp";
+    private String libPath = "lib\\";
 
     public HashMap<String, JarMethodLink> getMethods() {
         return methods;
@@ -35,8 +35,9 @@ public class SoftwareRepository implements IDirectoryObserver {
 
         if (listOfFiles != null) {
             for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".jar")) {
-                    loadMethods(listOfFiles[i].getName());
+
+                if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".jar") && !listOfFiles[i].getName().startsWith("guava")) {
+                    loadMethods(listOfFiles[i].getAbsolutePath());
                 }
             }
         }
@@ -52,16 +53,16 @@ public class SoftwareRepository implements IDirectoryObserver {
     }
 
     private void loadMethods(String path, String className) {
-        ArrayList<Method> result = MyClassLoader.methodsFromJar(path, path);
+        ArrayList<Method> result = MyClassLoader.methodsFromJar(path, className);
         for (Method method : result) {
             if (methods.get(method.getName()) != null) {
                 // update hashmap
                 methods.remove(method.getName());
-                methods.put(method.getName(), new JarMethodLink(path, path, method));
+                methods.put(method.getName(), new JarMethodLink(path, className, method));
             }
             else {
                 // insert into hashmap
-                methods.put(method.getName(), new JarMethodLink(path, path, method));
+                methods.put(method.getName(), new JarMethodLink(path, className, method));
             }
         }
     }

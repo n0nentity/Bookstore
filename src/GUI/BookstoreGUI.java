@@ -186,7 +186,8 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
     }
 
     public String getQuery() {
-        return queryTextArea.getText().toLowerCase().trim();
+        //return queryTextArea.getText().toLowerCase().trim();
+        return queryTextArea.getText().trim();
     }
 
     public void appendOutputText(String text) {
