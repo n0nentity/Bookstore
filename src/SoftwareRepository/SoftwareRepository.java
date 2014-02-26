@@ -2,6 +2,7 @@ package SoftwareRepository;
 
 import Globals.MyClassLoader;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class SoftwareRepository implements IDirectoryObserver {
 
         if (listOfFiles != null) {
             for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile()) {
+                if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".jar")) {
                     loadMethods(listOfFiles[i].getName());
                 }
             }
