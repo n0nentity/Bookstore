@@ -73,6 +73,45 @@ public class MyClassLoader extends java.lang.ClassLoader {
         throw new ClassNotFoundException();
     }
 
+    private ArrayList<Class> loadClasses(HashMap<String, ByteArrayOutputStream> hmBuffer) throws ClassNotFoundException{
+        ArrayList<Class> result = new ArrayList<Class>();
+        try {
+            byte[] classData = null;
+            //searching for the class
+            for(Map.Entry<String,ByteArrayOutputStream> e : hmBuffer.entrySet()){
+                if(e.getKey().endsWith(".class")) {
+                    classData = e.getValue().toByteArray();
+                    result.add(defineClass(e.getKey().substring(0, e.getKey().indexOf(".")), classData, 0, classData.length));
+                }
+            }
+        } catch (ClassFormatError e) { e.printStackTrace();}
+        catch (NullPointerException e) { e.printStackTrace();}
+
+        throw new ClassNotFoundException();
+    }
+      
+    public static ArrayList<Class> loadClassesFromJar(String path) {
+        ArrayList<Class> result = null;
+
+        HashMap<String,ByteArrayOutputStream> hm = null;
+        try{
+            //HashMap of classes from .jar
+            hm = MyClassLoader.unzipJar(path);
+        }
+        catch (IOException e){ e.printStackTrace(); }
+
+        try {
+            //Getting the Class
+            java.lang.ClassLoader parentClassLoader = MyClassLoader.class.getClassLoader();
+            MyClassLoader myClassLoader = new MyClassLoader(parentClassLoader);
+
+            result = myClassLoader.loadClasses(hm);
+        }
+        catch (ClassNotFoundException e)   { e.printStackTrace();}
+
+        return result;
+    }
+
     /**
      * Calls a method from a .jar archive
      * @param path to the .jar (e.g. "C:\\TEST\\test.jar")
@@ -122,7 +161,7 @@ public class MyClassLoader extends java.lang.ClassLoader {
             //Getting the Class
             java.lang.ClassLoader parentClassLoader = MyClassLoader.class.getClassLoader();
             MyClassLoader myClassLoader = new MyClassLoader(parentClassLoader);
-            
+
             Class serviceClass = myClassLoader.loadClass(className,hm);
             //Getting the method
             Object serviceObject = serviceClass.newInstance();

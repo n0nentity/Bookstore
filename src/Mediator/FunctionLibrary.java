@@ -16,6 +16,6 @@ public class FunctionLibrary{
     public static void updateBook(String oldTitle, String newTitle){}
     public static void drop(String title){}
     public static void sell(String title, int quantity){}
-    public static void  buy(String title, int quantity){}
+    public static void buy(String title, int quantity){}
     public static void undo(){}
 }
