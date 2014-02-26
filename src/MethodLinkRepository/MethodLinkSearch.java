@@ -1,62 +1,60 @@
-package Search;
-
-import Globals.Book;
+package MethodLinkRepository;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HashMapSearch extends HashMap<String,Book> {
+public class MethodLinkSearch extends HashMap<String,MethodLink> {
 
 	// search versucht zun�chst eine direkte �bereinstimmung zu finden.
 	// Danach wird auf einen Regul�renausdruck getestet.
 	// Wenn hier auch keine �bereinstimmung gefunden wird, wird Soundex verwendet.
-    public HashMap<String,Book> search(String name){
-    	HashMap<String,Book> tmp;
+    public HashMap<String,MethodLink> search(String name){
+    	HashMap<String,MethodLink> tmp;
     	tmp = searchDirect(name);
     	if(tmp.size()==0){
     		tmp = searchRegex(name);
     		if(tmp.size()==0){
     			tmp = searchSoundex(name);
     			if(tmp.size()==0){
-    				tmp = new HashMap<String,Book>();
+    				tmp = new HashMap<String,MethodLink>();
     			}
     		}
     	}
     	return tmp;
     }
-   
-    private HashMap<String,Book> searchDirect(String name){
-    	HashMap<String,Book> tmp = new HashMap<String, Book>();
-    	Book  tmpBook = this.get(name);
+
+    private HashMap<String,MethodLink> searchDirect(String name){
+    	HashMap<String,MethodLink> tmp = new HashMap<String, MethodLink>();
+        MethodLink  tmpBook = this.get(name);
     	if(tmpBook!=null){
     		tmp.put(name,tmpBook);
     	}
     	return tmp;
     }
-    
-    public HashMap<String, Book> searchRegex(String searchString){
-        HashMap<String,Book> tmp = new HashMap<String, Book>();
-        Iterator<Book> it = this.values().iterator();
-        Book srv;
+
+    public HashMap<String, MethodLink> searchRegex(String searchString){
+        HashMap<String,MethodLink> tmp = new HashMap<String, MethodLink>();
+        Iterator<MethodLink> it = this.values().iterator();
+        MethodLink srv;
         Matcher m;
 
         while(it.hasNext()){
             srv = it.next();
-            m = Pattern.compile(searchString).matcher(srv.getTitle());
-            if(m.matches()) tmp.put(srv.getTitle(), srv);
+            m = Pattern.compile(searchString).matcher(srv.getGuiMethodName());
+            if(m.matches()) tmp.put(srv.getGuiMethodName(), srv);
         }
         return tmp;
     }
 
-    
-    private HashMap<String,Book> searchSoundex(String name){
+
+    private HashMap<String,MethodLink> searchSoundex(String name){
     	String strSoundex = soundex(name);
-    	HashMap<String,Book> tmp = new HashMap<String,Book>();
+    	HashMap<String,MethodLink> tmp = new HashMap<String,MethodLink>();
         Iterator<String> it = this.keySet().iterator();
         String tmpString;
-        
+
         while(it.hasNext()){
             tmpString = it.next();
             if(soundex(tmpString).equals(strSoundex)) tmp.put(tmpString,this.get(tmpString));
@@ -64,7 +62,7 @@ public class HashMapSearch extends HashMap<String,Book> {
         return tmp;
 
     }
-    
+
     public static String soundex(String string) {
         char[] x = string.toUpperCase().toCharArray();
         char firstLetter = x[0];

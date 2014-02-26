@@ -1,6 +1,7 @@
 package Transaction;
 
 import Globals.Book;
+import Persistence.Persistence;
 
 public class Transaction implements ITransaction {
     private Book book;
@@ -13,6 +14,9 @@ public class Transaction implements ITransaction {
         previousTransactionToCareTaker = backupLastTransaction();
 
         book.setQuantity(quantity+1);
+
+        Persistence.getInstance().update(book);
+
         return book + " buy";
     }
 
@@ -22,6 +26,9 @@ public class Transaction implements ITransaction {
         previousTransactionToCareTaker = backupLastTransaction();
 
         book.setQuantity(quantity-1);
+
+        Persistence.getInstance().update(book);
+
         return book + " sell";
     }
 
@@ -29,6 +36,8 @@ public class Transaction implements ITransaction {
         if (previousTransactionToCareTaker != null) {
             restorePreviousTransaction(previousTransactionToCareTaker);
             book.setQuantity(quantity);
+
+            Persistence.getInstance().update(book);
         }
 
         previousTransactionToCareTaker = null;

@@ -6,6 +6,7 @@ import Globals.Book;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  * Created by HeierMi on 24.02.14.
@@ -15,11 +16,20 @@ import java.sql.ResultSet;
  String, delete(book) und select (title) : Book an.
  */
 public class Persistence implements IBookDAO {
+    private static Persistence instance;
+
+    public static Persistence getInstance() {
+        if (instance == null)
+            instance = new Persistence();
+        return instance;
+    }
+
     private Connection databaseConnection;
     private PreparedStatement preparedStatement = null;
 
     private static final String insertSQLStatement = "INSERT INTO book (uuid,title,quantity) VALUES (?,?,?)";
-    private static final String selectSQLStatement = "SELECT uuid,title,quantity FROM book WHERE name = ?";
+    private static final String selectSQLStatement = "SELECT uuid,title,quantity FROM book WHERE title = ?";
+    private static final String selectAllSQLStatement = "SELECT uuid,title,quantity FROM book";
     private static final String updateSQLStatement = "UPDATE book SET title = ?, quantity = ? WHERE uuid = ?";
     private static final String deleteSQLStatement = "DELETE FROM book WHERE uuid = ?";
 
@@ -118,7 +128,7 @@ public class Persistence implements IBookDAO {
             preparedStatement.setString(1,title);
             preparedStatement.execute();
             resultSet = preparedStatement.getResultSet();
-            if (resultSet.next() && resultSet != null) {
+            if (resultSet != null && resultSet.next()) {
                 service = new Book(resultSet.getString(1),
                         resultSet.getString(2),
                         resultSet.getInt(3));
@@ -128,5 +138,26 @@ public class Persistence implements IBookDAO {
         }
 
         return service;
+    }
+
+    public ArrayList<Book> getBooks() {
+        ArrayList<Book> result = new ArrayList<Book>();
+        ResultSet resultSet = null;
+
+        try {
+            databaseConnection = MySQL.getInstance().getDatabaseConnection();
+            preparedStatement = databaseConnection.prepareStatement(selectAllSQLStatement);
+            preparedStatement.execute();
+            resultSet = preparedStatement.getResultSet();
+            while (resultSet != null && resultSet.next()) {
+                result.add(new Book(resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3)));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return result;
     }
 }

@@ -1,5 +1,9 @@
 package Settings;
 
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
+import javax.xml.bind.annotation.XmlTransient;
 import java.beans.XMLEncoder;
 import java.beans.XMLDecoder;
 import java.io.*;
@@ -16,8 +20,11 @@ public class Settings {
     private int databasePort;
     private String databaseType;
     private String databaseUser;
-    private String databasePassword = null;
     private String databasePasswordEncrypted;
+    @XmlTransient
+    private AES aes = new AES();
+    @XmlTransient
+    private String internalPassword = "DHBWSE2istGenial";
 
     public String getDatabasePasswordEncrypted() {
         return databasePasswordEncrypted;
@@ -36,10 +43,17 @@ public class Settings {
     }
 
     public String getDatabasePassword() {
-        // decrypt
-        if (databasePassword == null)
-            databasePassword = "";
-        return databasePassword;
+        String result = null;
+        try {
+            // Decoding String with AES
+            byte[] decode = new BASE64Decoder().decodeBuffer(databasePasswordEncrypted);
+            InputStream is = new ByteArrayInputStream( decode );
+            result = new String( aes.decode(is, internalPassword) );
+        }
+        catch (Exception e) {
+
+        }
+        return result;
     }
 
     public String getDatabaseHost() {
@@ -75,6 +89,13 @@ public class Settings {
     }
 
     public void setDatabasePassword(String databasePassword) {
-        this.databasePassword = databasePassword;
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            aes.exEncode(databasePassword, out, internalPassword);
+            databasePasswordEncrypted = new BASE64Encoder().encode( out.toByteArray() );
+        }
+        catch (Exception e) {
+
+        }
     }
 }
