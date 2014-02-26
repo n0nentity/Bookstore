@@ -1,5 +1,8 @@
 package GUI;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -45,8 +48,13 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
     private JPanel southPanel;
     private JTextField statusTextField;
 
-    public BookstoreGUI() {
+    private EventBus eventBus;
+
+    public BookstoreGUI(EventBus eventBus) {
         setTitle("Buchhandlung");
+
+        this.eventBus = eventBus;
+        this.eventBus.register(this);
 
         mainPanel = new JPanel(new BorderLayout());
 
@@ -199,6 +207,7 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
 
     public void execute(String query) {
         appendOutputText("execute : " + query);
+        eventBus.post(new RequestButtonEvent(query));
     }
 
     public void reset() {
@@ -245,6 +254,11 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
     }
 
     public static void main(String... args) {
-        BookstoreGUI buchhandlungGUI = new BookstoreGUI();
+        BookstoreGUI buchhandlungGUI = new BookstoreGUI(new EventBus());
+    }
+
+    @Subscribe
+    public void handleUpdateDisplayEvents(UpdateDisplayEvent updateDisplayEvent) {
+        outputTextArea.append(updateDisplayEvent.value);
     }
 }
