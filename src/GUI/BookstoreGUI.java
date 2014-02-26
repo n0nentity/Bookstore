@@ -267,6 +267,6 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
         Response r = updateDisplayEvent.value;
 
         if (r.getUuid().toString().equals(this.guiID.toString()))
-            outputTextArea.append(r.getResponse());
+            appendOutputText(r.getResponse());
     }
 }
