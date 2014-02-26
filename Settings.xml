@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="1.7.0_09" class="java.beans.XMLDecoder">
  <object class="Settings.Settings">
-      <void property="databaseHost">
-       <string>db516629543.db.1and1.com</string>
-      </void>
-     <void property="databaseName">
-         <string>db516629543</string>
-     </void>
-     <void property="databasePort">
-         <int>8080</int>
-     </void>
-     <void property="databaseType">
-         <string>MySQL</string>
-     </void>
-     <void property="databaseUser">
-         <string>dbo516629543</string>
-     </void>
-     <void property="databasePasswordEncrypted">
-         <string>Initial1</string>
-     </void>
+  <void property="databaseHost">
+   <string>db516629543.db.1and1.com</string>
+  </void>
+  <void property="databaseName">
+   <string>db516629543</string>
+  </void>
+  <void property="databasePort">
+   <int>3306</int>
+  </void>
+  <void property="databaseType">
+   <string>MySQL</string>
+  </void>
+  <void property="databaseUser">
+   <string>dbo516629543</string>
+  </void>
+  <void property="databasePasswordEncrypted">
+     <string>qUkkLZkRcGN6RcF4uCBdaQ==</string>
+  </void>
  </object>
 </java>

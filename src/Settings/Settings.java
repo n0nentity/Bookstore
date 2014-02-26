@@ -14,7 +14,7 @@ import java.io.*;
  Parametern port, databaseType, databaseUser
  und (AES-verschlüsseltem) databasePassword.
  */
-public class Settings {
+public class Settings implements Serializable {
     private String databaseHost = "localhost";
     private String databaseName = "bookstore";
     private int databasePort;

@@ -16,11 +16,18 @@ public class MySQL {
 
     private Connection createConnection() {
         try {
+            /*
             String databaseConnectionURL = "jdbc:mysql://" + SettingsHandler.getInstance().getSettings().getDatabaseHost()
                     + ":" + SettingsHandler.getInstance().getSettings().getDatabasePort()
                     + ";databaseName=" + SettingsHandler.getInstance().getSettings().getDatabaseName()
                     + ";user=" + SettingsHandler.getInstance().getSettings().getDatabaseUser()
                     + ";password=" + SettingsHandler.getInstance().getSettings().getDatabasePassword();
+                    */
+            String databaseConnectionURL = "jdbc:mysql://" + SettingsHandler.getInstance().getSettings().getDatabaseHost()
+                    + "/" + SettingsHandler.getInstance().getSettings().getDatabaseName()
+                    + "?user=" + SettingsHandler.getInstance().getSettings().getDatabaseUser()
+                    + "&password=" + SettingsHandler.getInstance().getSettings().getDatabasePassword()
+                    + "&useUnicode=true&characterEncoding=UTF-8";
             Class.forName("com.mysql.jdbc.Driver");
             this.databaseConnection = DriverManager.getConnection(databaseConnectionURL);
         } catch (SQLException sqle) {

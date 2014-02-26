@@ -36,7 +36,7 @@ public class SoftwareRepository implements IDirectoryObserver {
         if (listOfFiles != null) {
             for (int i = 0; i < listOfFiles.length; i++) {
 
-                if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".jar") && !listOfFiles[i].getName().startsWith("guava")) {
+                if (listOfFiles[i].isFile() && listOfFiles[i].getName().endsWith(".jar") && !listOfFiles[i].getName().startsWith("guava") && !listOfFiles[i].getName().startsWith("mysql")) {
                     loadMethods(listOfFiles[i].getAbsolutePath());
                 }
             }
