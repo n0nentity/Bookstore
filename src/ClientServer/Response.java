@@ -1,11 +1,16 @@
 package ClientServer;
 
 import java.util.UUID;
+import java.io.Serializable;
 
 /**
  * Created by HeierMi on 26.02.14.
  */
-public class Response {
+public class Response implements Serializable {
+    public Response() {
+
+    }
+
     public Response(UUID uuid) {
         this.uuid = uuid;
     }

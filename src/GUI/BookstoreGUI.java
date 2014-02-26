@@ -1,5 +1,7 @@
 package GUI;
 
+import ClientServer.Request;
+import ClientServer.Response;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
@@ -10,9 +12,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.Vector;
 
 public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener {
+    private UUID guiID = UUID.randomUUID();
+
     private static final long serialVersionUID = 3336147L;
 
     private String lineSeparator = System.lineSeparator();
@@ -207,7 +212,7 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
 
     public void execute(String query) {
         appendOutputText("execute : " + query);
-        eventBus.post(new RequestButtonEvent(query));
+        eventBus.post(new RequestButtonEvent(new Request(guiID, query)));
     }
 
     public void reset() {
@@ -259,6 +264,9 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
 
     @Subscribe
     public void handleUpdateDisplayEvents(UpdateDisplayEvent updateDisplayEvent) {
-        outputTextArea.append(updateDisplayEvent.value);
+        Response r = updateDisplayEvent.value;
+
+        if (r.getUuid().toString().equals(this.guiID.toString()))
+            outputTextArea.append(r.getResponse());
     }
 }

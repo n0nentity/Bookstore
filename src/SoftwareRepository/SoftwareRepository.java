@@ -11,9 +11,18 @@ import java.util.HashMap;
  * Created by HeierMi on 24.02.14.
  */
 public class SoftwareRepository implements IDirectoryObserver {
+    public SoftwareRepository() {
+        loadMethods();
+
+        DirectoryWatcher dw=new DirectoryWatcher(libPath);
+        this.IPublisher = dw;
+        this.IPublisher.registerObserver(this);
+        dw.start();
+    }
+
     private IDirectoryPublisher IPublisher;
     private HashMap<String, JarMethodLink> methods = new HashMap<String, JarMethodLink>();
-    private String libPath = "";
+    private String libPath = "C:\\Temp";
 
     public HashMap<String, JarMethodLink> getMethods() {
         return methods;
@@ -23,9 +32,11 @@ public class SoftwareRepository implements IDirectoryObserver {
         File folder = new File(libPath);
         File[] listOfFiles = folder.listFiles();
 
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                loadMethods(listOfFiles[i].getName());
+        if (listOfFiles != null) {
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if (listOfFiles[i].isFile()) {
+                    loadMethods(listOfFiles[i].getName());
+                }
             }
         }
     }
@@ -52,16 +63,6 @@ public class SoftwareRepository implements IDirectoryObserver {
                 methods.put(method.getName(), new JarMethodLink(path, path, method));
             }
         }
-    }
-
-
-    public SoftwareRepository() {
-        loadMethods();
-
-        DirectoryWatcher dw=new DirectoryWatcher(libPath);
-        this.IPublisher = dw;
-        this.IPublisher.registerObserver(this);
-        dw.start();
     }
 
     @Override

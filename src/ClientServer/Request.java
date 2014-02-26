@@ -1,11 +1,15 @@
 package ClientServer;
 
 import java.util.UUID;
+import java.io.Serializable;
 
 /**
  * Created by HeierMi on 26.02.14.
  */
-public class Request {
+public class Request implements Serializable {
+    public Request() {
+    }
+
     public Request(UUID uuid) {
         this.uuid = uuid;
     }

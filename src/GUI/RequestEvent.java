@@ -1,9 +1,11 @@
 package GUI;
 
-public class RequestEvent {
-    protected String value;
+import ClientServer.Request;
 
-    public RequestEvent(String value) {
+public class RequestEvent {
+    protected Request value;
+
+    public RequestEvent(Request value) {
         this.value = value;
     }
 }

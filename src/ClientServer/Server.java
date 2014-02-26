@@ -15,7 +15,12 @@ public class Server {
 	private Socket connection; 
 	private ObjectOutputStream outStream;
 	private ObjectInputStream inStream;
-		/**
+
+    public Socket getConnection() {
+        return connection;
+    }
+
+    /**
 		 * Oeffnet Socket und wartet auf eingehende Verbindung.
 		 * @param serverPort
 		 * @param maxQueueLength
@@ -23,7 +28,8 @@ public class Server {
 		 */
 		public boolean waitForClient(int serverPort, int maxQueueLength){
 			try {
-				serverSocket = new ServerSocket(serverPort, maxQueueLength);
+                if (serverSocket == null)
+				    serverSocket = new ServerSocket(serverPort, maxQueueLength);
 				connection=serverSocket.accept();
 				outStream = new ObjectOutputStream(connection.getOutputStream());
 				inStream = new ObjectInputStream(connection.getInputStream());

@@ -3,10 +3,10 @@ package GUI;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
-public class CalculatorController implements Runnable {
+public class BookstoreController implements Runnable {
     private EventBus eventBus;
 
-    public CalculatorController(EventBus eventBus) {
+    public BookstoreController(EventBus eventBus) {
         this.eventBus = eventBus;
     }
 

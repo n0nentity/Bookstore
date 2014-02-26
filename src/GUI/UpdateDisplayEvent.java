@@ -1,9 +1,11 @@
 package GUI;
 
-public class UpdateDisplayEvent {
-    protected String value;
+import ClientServer.Response;
 
-    public UpdateDisplayEvent(String value) {
+public class UpdateDisplayEvent {
+    protected Response value;
+
+    public UpdateDisplayEvent(Response value) {
         this.value = value;
     }
 }

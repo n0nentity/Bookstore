@@ -1,5 +1,6 @@
 package Mediator;
 
+import ClientServer.Server;
 import Globals.Book;
 import Globals.MyClassLoader;
 import MethodLinkRepository.MethodLink;
@@ -16,6 +17,13 @@ import java.util.HashMap;
  * Created by HeierMi on 26.02.14.
  */
 public class Mediator {
+    public Mediator() {
+        serverThread = new ServerThread(this);
+        serverThread.start();
+    }
+
+    private ServerThread serverThread;
+
     private MethodLinkRepository methodLinkRepository = new MethodLinkRepository();
     private SoftwareRepository softwareRepository = new SoftwareRepository();
     private Parser parser = new Parser();

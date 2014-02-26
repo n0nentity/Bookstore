@@ -1,9 +1,11 @@
 package GUI;
 
-public abstract class ButtonEvent {
-    protected String value;
+import ClientServer.Request;
 
-    public ButtonEvent(String value) {
+public abstract class ButtonEvent {
+    protected Request value;
+
+    public ButtonEvent(Request value) {
         this.value = value;
     }
 }

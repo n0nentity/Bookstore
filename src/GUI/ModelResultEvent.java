@@ -1,9 +1,11 @@
 package GUI;
 
-public class ModelResultEvent {
-    protected String value;
+import ClientServer.Response;
 
-    public ModelResultEvent(String value) {
+public class ModelResultEvent {
+    protected Response value;
+
+    public ModelResultEvent(Response value) {
         this.value = value;
     }
 }
