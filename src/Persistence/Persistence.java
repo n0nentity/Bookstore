@@ -33,7 +33,7 @@ public class Persistence implements IBookDAO {
     private static final String updateSQLStatement = "UPDATE book SET title = ?, quantity = ? WHERE uuid = ?";
     private static final String deleteSQLStatement = "DELETE FROM book WHERE uuid = ?";
 
-    public void insert(Book book) {
+    public String insert(Book book) {
         System.out.println("--- insert");
         System.out.println("book : " + book);
 
@@ -45,17 +45,20 @@ public class Persistence implements IBookDAO {
                 preparedStatement.setString(2,book.getTitle());
                 preparedStatement.setInt(3,book.getQuantity());
                 preparedStatement.execute();
+                return "insert completed successfully: " + book.getTitle();
             } else {
                 System.out.println("book " + book.getTitle() + " exists");
+                return "insert failed: " + book.getTitle() + " exists";
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return "insert failed: " + e.getMessage();
         }
 
-        System.out.println("---");
+        //System.out.println("---");
     }
 
-    public boolean update(Book book) {
+    public String update(Book book) {
         System.out.println("--- update");
         System.out.println("book : " + book);
 
@@ -69,9 +72,10 @@ public class Persistence implements IBookDAO {
                 preparedStatement.setString(3,book.getUuid());
                 preparedStatement.execute();
                 databaseConnection.commit();
-                return true;
+                return "update completed successfully: " + book.getTitle();
             } else {
                 System.out.println("book " + book.getTitle() + " not exists");
+                return "update failed: " + book.getTitle() + " exists";
             }
         } catch (Exception e) {
             try {
@@ -80,14 +84,11 @@ public class Persistence implements IBookDAO {
             } catch (Exception rbe) {
                 rbe.getMessage();
             }
+            return "update failed: " + e.getMessage();
         }
-
-        System.out.println("---");
-
-        return false;
     }
 
-    public boolean delete(Book book) {
+    public String delete(Book book) {
         System.out.println("--- delete");
         System.out.println("book : " + book);
 
@@ -97,17 +98,15 @@ public class Persistence implements IBookDAO {
                 preparedStatement = databaseConnection.prepareStatement(deleteSQLStatement);
                 preparedStatement.setString(1, book.getUuid());
                 preparedStatement.execute();
-                return true;
+                return "delete completed successfully: " + book.getTitle();
             } else {
                 System.out.println("book " + book.getTitle() + " not exists");
+                return "delete failed: " + book.getTitle() + " exists";
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return "delete failed: " + e.getMessage();
         }
-
-        System.out.println("---");
-
-        return false;
     }
 
     public boolean exists(Book book) {

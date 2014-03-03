@@ -82,11 +82,13 @@ public class Mediator {
                         }
                         else {
                             book = getBookByTitle(guiFunctionParams[0]);
+                            if (methodLink.getGuiMethodName().equals("newBook"))
+                                book = new Book(null, guiFunctionParams[0], 1);
 
                             softwareRepoParaTypes = new Class[1];
                             softwareRepoParaValues = new Object[1];
 
-                            if (methodLink.getGuiMethodName().equals("searchBook") || methodLink.getGuiMethodName().equals("newBook")) {
+                            if (methodLink.getGuiMethodName().equals("searchBook")) {
                                 softwareRepoParaTypes[0] = String.class;
                                 softwareRepoParaValues[0] = guiFunctionParams[0];
                             }
@@ -115,7 +117,8 @@ public class Mediator {
                             while (quantity > 0) {
                                 JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
                                 if (method != null) {
-                                    MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName(), softwareRepoParaTypes, softwareRepoParaValues);
+                                    Object result = MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName(), softwareRepoParaTypes, softwareRepoParaValues);
+                                    response = "" + result;
                                 }
                                 quantity--;
                             }

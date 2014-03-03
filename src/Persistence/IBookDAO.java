@@ -6,8 +6,8 @@ import Globals.Book;
  * Created by HeierMi on 24.02.14.
  */
 public interface IBookDAO {
-    public void insert(Book book);
+    public String insert(Book book);
     public Book select(String uuid);
-    public boolean update(Book book);
-    public boolean delete(Book book);
+    public String update(Book book);
+    public String delete(Book book);
 }

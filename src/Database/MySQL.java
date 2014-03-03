@@ -24,6 +24,7 @@ public class MySQL {
                     + ";password=" + SettingsHandler.getInstance().getSettings().getDatabasePassword();
                     */
             String databaseConnectionURL = "jdbc:mysql://" + SettingsHandler.getInstance().getSettings().getDatabaseHost()
+                    + ":" + SettingsHandler.getInstance().getSettings().getDatabasePort()
                     + "/" + SettingsHandler.getInstance().getSettings().getDatabaseName()
                     + "?user=" + SettingsHandler.getInstance().getSettings().getDatabaseUser()
                     + "&password=" + SettingsHandler.getInstance().getSettings().getDatabasePassword()

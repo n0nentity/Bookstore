@@ -1,6 +1,7 @@
 package SoftwareRepository;
 
 import Globals.MyClassLoader;
+import sun.tools.jar.resources.jar;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
@@ -69,6 +70,11 @@ public class SoftwareRepository implements IDirectoryObserver {
 
     @Override
     public void update(String action, String filename) {
-        loadMethods(filename);
+        ArrayList<JarMethodLink> arrayList = new ArrayList<>(methods.values());
+        for (JarMethodLink jarMethodLink : arrayList) {
+            if (new File(jarMethodLink.getPath()).getName().equals(filename))
+                methods.remove(jarMethodLink.getMethod().getName());
+        }
+        loadMethods(libPath + filename);
     }
 }

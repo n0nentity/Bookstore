@@ -39,6 +39,15 @@ public class Book {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "uuid='" + uuid + '\'' +
+                ", title='" + title + '\'' +
+                ", quantity=" + quantity +
+                '}';
+    }
+
     private String uuid = null;
     private String title;
     private int quantity;
