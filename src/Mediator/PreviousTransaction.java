@@ -1,21 +1,21 @@
-package Transaction;
+package Mediator;
 
 import Globals.Book;
 
 public class PreviousTransaction implements IPreviousTransactionToCareTaker, IPreviousTransactionToOriginator {
     private Book book;
-    private int quantity;
+    private GuiCommand guiCommand;
 
-    public PreviousTransaction(Book book, int quantity) {
+    public PreviousTransaction(Book book, GuiCommand guiCommand) {
         this.book = book;
-        this.quantity = quantity;
+        this.guiCommand = guiCommand;
     }
 
     public Book getBook() {
         return book;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public GuiCommand getGuiCommand() {
+        return guiCommand;
     }
 }

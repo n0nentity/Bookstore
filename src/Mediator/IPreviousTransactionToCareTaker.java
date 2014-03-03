@@ -1,4 +1,4 @@
-package Transaction;
+package Mediator;
 
 public interface IPreviousTransactionToCareTaker {
 }

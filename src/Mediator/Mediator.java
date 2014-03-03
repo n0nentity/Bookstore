@@ -1,7 +1,6 @@
 package Mediator;
 
 import ClientServer.Request;
-import ClientServer.Server;
 import Globals.Book;
 import Globals.MyClassLoader;
 import MethodLinkRepository.MethodLink;
@@ -10,14 +9,13 @@ import Persistence.Persistence;
 import SoftwareRepository.SoftwareRepository;
 import SoftwareRepository.JarMethodLink;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 
 /**
  * Created by HeierMi on 26.02.14.
  */
-public class Mediator {
+public class Mediator implements ITransaction {
     public Mediator() {
         serverThread = new ServerThread(this);
         serverThread.start();
@@ -60,35 +58,29 @@ public class Mediator {
                     if (parser.parse(requestString)) {
                         String[] guiFunctionParams = parser.getFunctionParams(requestString);
 
-                        /*
-                        public static void newBook(String title){}
-                        public static void searchBook(String title){}
-                        public static void updateBook(String oldTitle, String newTitle){}
-                        public static void drop(String title){}
-                        public static void sell(String title, int quantity){}
-                        public static void buy(String title, int quantity){}
-                        public static void undo(){}
-                        */
                         Class[] softwareRepoParaTypes = null;
                         Object[] softwareRepoParaValues = null;
 
                         Book book = null;
 
-                        if (methodLink.getGuiMethodName().equals("undo"))
+                        if (methodLink.getGuiMethodName().equals(GuiCommand.undo.toString()))
                         {
+                            undo();
+                            /*
                             JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
                             //
                             MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName());
+                            */
                         }
                         else {
                             book = getBookByTitle(guiFunctionParams[0]);
-                            if (methodLink.getGuiMethodName().equals("newBook"))
+                            if (methodLink.getGuiMethodName().equals(GuiCommand.newBook.toString()))
                                 book = new Book(null, guiFunctionParams[0], 1);
 
                             softwareRepoParaTypes = new Class[1];
                             softwareRepoParaValues = new Object[1];
 
-                            if (methodLink.getGuiMethodName().equals("searchBook")) {
+                            if (methodLink.getGuiMethodName().equals(GuiCommand.searchBook.toString())) {
                                 softwareRepoParaTypes[0] = String.class;
                                 softwareRepoParaValues[0] = guiFunctionParams[0];
                             }
@@ -109,8 +101,8 @@ public class Mediator {
 
                             int quantity = 1;
 
-                            if (methodLink.getGuiMethodName().equals("sell")
-                                    || methodLink.getGuiMethodName().equals("buy")){
+                            if (methodLink.getGuiMethodName().equals(GuiCommand.sell.toString())
+                                    || methodLink.getGuiMethodName().equals(GuiCommand.buy.toString())){
                                 quantity = Integer.parseInt(guiFunctionParams[1]);
                             }
 
@@ -138,5 +130,29 @@ public class Mediator {
             response = "method " + requestString + " syntax incorrect";
         }
         return response;
+    }
+
+    private Book book;
+    private GuiCommand guiCommand;
+    private IPreviousTransactionToCareTaker previousTransactionToCareTaker;
+
+    public String undo() {
+        if (previousTransactionToCareTaker != null) {
+            restorePreviousTransaction(previousTransactionToCareTaker);
+        }
+
+        previousTransactionToCareTaker = null;
+        return " undo";
+    }
+
+    @Override
+    public IPreviousTransactionToCareTaker backupLastTransaction() {
+        return new PreviousTransaction(book, guiCommand);
+    }
+
+    @Override
+    public void restorePreviousTransaction(IPreviousTransactionToCareTaker memento) {
+        this.book = ((IPreviousTransactionToOriginator)memento).getBook();
+        this.guiCommand = ((IPreviousTransactionToOriginator)memento).getGuiCommand();
     }
 }

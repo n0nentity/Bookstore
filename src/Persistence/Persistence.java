@@ -63,6 +63,7 @@ public class Persistence implements IBookDAO {
         System.out.println("book : " + book);
 
         try {
+            /*
             if (exists(book)) {
                 databaseConnection = MySQL.getInstance().getDatabaseConnection();
                 databaseConnection.setAutoCommit(false);
@@ -77,6 +78,16 @@ public class Persistence implements IBookDAO {
                 System.out.println("book " + book.getTitle() + " not exists");
                 return "update failed: " + book.getTitle() + " exists";
             }
+            */
+            databaseConnection = MySQL.getInstance().getDatabaseConnection();
+            databaseConnection.setAutoCommit(false);
+            preparedStatement = databaseConnection.prepareStatement(updateSQLStatement);
+            preparedStatement.setString(1,book.getTitle());
+            preparedStatement.setInt(2,book.getQuantity());
+            preparedStatement.setString(3,book.getUuid());
+            preparedStatement.execute();
+            databaseConnection.commit();
+            return "update completed successfully: " + book.getTitle();
         } catch (Exception e) {
             try {
                 databaseConnection.rollback();

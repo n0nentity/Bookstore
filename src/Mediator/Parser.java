@@ -33,19 +33,26 @@ public class Parser {
             Method func = funcs.get(f);
             if(func != null){
                 try {
-                    Class[] parameterTypes = func.getParameterTypes();
-                    Object[] parameter = new Object[p.length];
-                    for (int i = 0; i < p.length; i++) {
-                        if (i < parameterTypes.length) {
-                            if (parameterTypes[i] == int.class) {
-                                parameter[i] = new Integer(p[i].trim());
+                    Class[] parameterTypes = null;
+                    Object[] parameter = null;
+                    if (p.length == 1 && p[0].equals("")) {
+
+                    }
+                    else {
+                        parameterTypes = func.getParameterTypes();
+                        parameter = new Object[p.length];
+                        for (int i = 0; i < p.length; i++) {
+                            if (i < parameterTypes.length) {
+                                if (parameterTypes[i] == int.class) {
+                                    parameter[i] = new Integer(p[i].trim());
+                                }
+                                else {
+                                    parameter[i] = p[i].trim();
+                                }
                             }
                             else {
                                 parameter[i] = p[i].trim();
                             }
-                        }
-                        else {
-                            parameter[i] = p[i].trim();
                         }
                     }
                     func.invoke(null, parameter);
