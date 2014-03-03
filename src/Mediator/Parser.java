@@ -32,16 +32,31 @@ public class Parser {
             String[] p = cmd.substring(cmd.indexOf('(')+1,cmd.length()-1).split(",");
             Method func = funcs.get(f);
             if(func != null){
-                return true;
-                /*
                 try {
-                    return (String)func.invoke(null,new Object[]{p});
+                    Class[] parameterTypes = func.getParameterTypes();
+                    Object[] parameter = new Object[p.length];
+                    for (int i = 0; i < p.length; i++) {
+                        if (i < parameterTypes.length) {
+                            if (parameterTypes[i] == int.class) {
+                                parameter[i] = new Integer(p[i].trim());
+                            }
+                            else {
+                                parameter[i] = p[i].trim();
+                            }
+                        }
+                        else {
+                            parameter[i] = p[i].trim();
+                        }
+                    }
+                    func.invoke(null, parameter);
+                    return true;
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                */
             }
             return false;
             //return "Unbekannte Funktion \"" + f + "\"";

@@ -61,44 +61,52 @@ public class Mediator {
 
                     if (methodLink.getGuiMethodName().equals("undo"))
                     {
+                        JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
                         //
+                        MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName());
                     }
                     else {
                         book = getBookByTitle(guiFunctionParams[0]);
-                        if (methodLink.getGuiMethodName().equals("updateBook")) {
-                            book.setTitle(guiFunctionParams[1]);
-                        }
-                        if (methodLink.getGuiMethodName().equals("sell")
-                                || methodLink.getGuiMethodName().equals("buy")){
-                            // multiple call???
-                        }
 
-                        softwareRepoParaTypes = new Class[1];
-                        softwareRepoParaValues = new Object[1];
+                        if (book != null) {
+                            if (methodLink.getGuiMethodName().equals("updateBook")) {
+                                book.setTitle(guiFunctionParams[1]);
+                            }
+                            if (methodLink.getGuiMethodName().equals("sell")
+                                    || methodLink.getGuiMethodName().equals("buy")){
+                                // multiple call???
+                            }
 
-                        if (methodLink.getGuiMethodName().equals("search")) {
-                            softwareRepoParaTypes[0] = String.class;
-                            softwareRepoParaValues[0] = guiFunctionParams[0];
+                            softwareRepoParaTypes = new Class[1];
+                            softwareRepoParaValues = new Object[1];
+
+                            if (methodLink.getGuiMethodName().equals("search")) {
+                                softwareRepoParaTypes[0] = String.class;
+                                softwareRepoParaValues[0] = guiFunctionParams[0];
+                            }
+                            else
+                            {
+                                softwareRepoParaTypes[0] = Book.class;
+                                softwareRepoParaValues[0] = book;
+                            }
+
+                            JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
+                            if (method != null) {
+                                MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName(), softwareRepoParaTypes, softwareRepoParaValues);
+                            }
                         }
-                        else
-                        {
-                            softwareRepoParaTypes[0] = Book.class;
-                            softwareRepoParaValues[0] = book;
+                        else {
+                            response = "book " + guiFunctionParams[0] + " not found";
                         }
                     }
-
-                    JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
-                    if (method != null) {
-                        if (softwareRepoParaTypes == null)
-                            MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName());
-                        else
-                            MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName(), softwareRepoParaTypes, softwareRepoParaValues);
-                    }
+                }
+                else {
+                    response = "method " + request + " syntax incorrect";
                 }
             }
         }
         else {
-            response = request + " not found";
+            response = "method " + request + " not found";
         }
         return response;
     }
