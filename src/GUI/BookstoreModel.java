@@ -17,7 +17,7 @@ public class BookstoreModel {
     }
 
     @Subscribe
-    public void handleAddEvent(RequestEvent addEvent) {
+    public void handleRequestEvent(RequestEvent requestEvent) {
         //result += addEvent.value;
         //result += ".test";
         //reportResult(result);
@@ -28,16 +28,16 @@ public class BookstoreModel {
         }
         Client client = new Client();
         if(client.connectToServer("localhost", 9910)){
-            if (client.sendRequest(addEvent.value)) {
+            if (client.sendRequest(requestEvent.value)) {
                 reportResult(client.receiveResponse());
             }
             else {
-                reportResult(new Response(addEvent.value.getUuid(), "send request failed"));
+                reportResult(new Response(requestEvent.value.getUuid(), "send request failed"));
             }
         }
         else {
             System.out.println("No Connection!");
-            reportResult(new Response(addEvent.value.getUuid(), "no connection to server"));
+            reportResult(new Response(requestEvent.value.getUuid(), "no connection to server"));
         }
 
         client.closeConnection();

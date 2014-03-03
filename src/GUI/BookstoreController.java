@@ -15,8 +15,8 @@ public class BookstoreController implements Runnable {
     }
 
     @Subscribe
-    public void handleAdditionButtonEvent(RequestButtonEvent additionButtonEvent) {
-        eventBus.post(new RequestEvent(additionButtonEvent.value));
+    public void handleRequestButtonEvent(RequestButtonEvent requestButtonEvent) {
+        eventBus.post(new RequestEvent(requestButtonEvent.value));
     }
 
     @Subscribe
