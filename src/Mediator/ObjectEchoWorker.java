@@ -22,7 +22,7 @@ public class ObjectEchoWorker extends Thread {
         try{
             Request request = server.receiveRequest();
 
-            String s = mediator.request(request.getRequest());
+            String s = mediator.request(request);
 
             Response response = new Response(request.getUuid(), s);
 

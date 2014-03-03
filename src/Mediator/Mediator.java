@@ -1,5 +1,6 @@
 package Mediator;
 
+import ClientServer.Request;
 import ClientServer.Server;
 import Globals.Book;
 import Globals.MyClassLoader;
@@ -43,19 +44,21 @@ public class Mediator {
         return Persistence.getInstance().select(title);
     }
 
-    public String request(String request) {
+    public String request(Request request) {
         String response = null;
 
-        if (request.indexOf("(") != -1) {
-            HashMap<String,MethodLink> searchResults = methodLinkRepository.getMethodLinkSearch().search(request.substring(0, request.indexOf("(")));
+        String requestString = request.getRequest();
+
+        if (requestString.indexOf("(") != -1) {
+            HashMap<String,MethodLink> searchResults = methodLinkRepository.getMethodLinkSearch().search(requestString.substring(0, requestString.indexOf("(")));
 
             if (searchResults != null && searchResults.size() == 1) {
                 // parse and interpret
 
                 Collection<MethodLink> methodLinks = searchResults.values();
                 for (MethodLink methodLink : methodLinks) {
-                    if (parser.parse(request)) {
-                        String[] guiFunctionParams = parser.getFunctionParams(request);
+                    if (parser.parse(requestString)) {
+                        String[] guiFunctionParams = parser.getFunctionParams(requestString);
 
                         /*
                         public static void newBook(String title){}
@@ -80,49 +83,56 @@ public class Mediator {
                         else {
                             book = getBookByTitle(guiFunctionParams[0]);
 
-                            if (book != null) {
-                                if (methodLink.getGuiMethodName().equals("updateBook")) {
-                                    book.setTitle(guiFunctionParams[1]);
-                                }
-                                if (methodLink.getGuiMethodName().equals("sell")
-                                        || methodLink.getGuiMethodName().equals("buy")){
-                                    // multiple call???
-                                }
+                            softwareRepoParaTypes = new Class[1];
+                            softwareRepoParaValues = new Object[1];
 
-                                softwareRepoParaTypes = new Class[1];
-                                softwareRepoParaValues = new Object[1];
-
-                                if (methodLink.getGuiMethodName().equals("search")) {
-                                    softwareRepoParaTypes[0] = String.class;
-                                    softwareRepoParaValues[0] = guiFunctionParams[0];
-                                }
-                                else
-                                {
+                            if (methodLink.getGuiMethodName().equals("searchBook") || methodLink.getGuiMethodName().equals("newBook")) {
+                                softwareRepoParaTypes[0] = String.class;
+                                softwareRepoParaValues[0] = guiFunctionParams[0];
+                            }
+                            else
+                            {
+                                if (book != null) {
                                     softwareRepoParaTypes[0] = Book.class;
                                     softwareRepoParaValues[0] = book;
                                 }
+                                else {
+                                    return "book " + guiFunctionParams[0] + " not found";
+                                }
+                            }
 
+                            if (methodLink.getGuiMethodName().equals("updateBook")) {
+                                book.setTitle(guiFunctionParams[1]);
+                            }
+
+                            int quantity = 1;
+
+                            if (methodLink.getGuiMethodName().equals("sell")
+                                    || methodLink.getGuiMethodName().equals("buy")){
+                                quantity = Integer.parseInt(guiFunctionParams[1]);
+                            }
+
+                            while (quantity > 0) {
                                 JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
                                 if (method != null) {
                                     MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName(), softwareRepoParaTypes, softwareRepoParaValues);
                                 }
+                                quantity--;
                             }
-                            else {
-                                response = "book " + guiFunctionParams[0] + " not found";
-                            }
+
                         }
                     }
                     else {
-                        response = "method " + request + " syntax incorrect";
+                        response = "method " + requestString + " syntax incorrect";
                     }
                 }
             }
             else {
-                response = "method " + request + " not found";
+                response = "method " + requestString + " not found";
             }
         }
         else {
-            response = "method " + request + " syntax incorrect";
+            response = "method " + requestString + " syntax incorrect";
         }
         return response;
     }
