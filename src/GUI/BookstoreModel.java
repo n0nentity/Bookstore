@@ -10,6 +10,28 @@ public class BookstoreModel {
     private String result;
     private EventBus eventBus;
     private Client client;
+    private String serverName = null;
+    private Integer serverPort = null;
+
+    public String getServerName() {
+        if (serverName == null)
+            serverName = "localhost";
+        return serverName;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
+
+    public int getServerPort() {
+        if (serverPort == null)
+            serverPort = 9910;
+        return serverPort;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+    }
 
     public BookstoreModel(EventBus eventBus) {
         this.eventBus = eventBus;
@@ -27,7 +49,7 @@ public class BookstoreModel {
             client = null;
         }
         Client client = new Client();
-        if(client.connectToServer("localhost", 9910)){
+        if(client.connectToServer(getServerName(), getServerPort())){
             if (client.sendRequest(requestEvent.value)) {
                 reportResult(client.receiveResponse());
             }

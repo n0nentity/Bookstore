@@ -15,16 +15,17 @@ public class Application {
     public static void main(String[] args){
         final EventBus eventBus = new EventBus();
         Mediator mediator = new Mediator();
+        mediator.setPort(9900);
 
-        new BookstoreModel(eventBus);
+        final BookstoreModel bookstoreModel = new BookstoreModel(eventBus);
         Thread controller = new Thread(new BookstoreController(eventBus));
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                BookstoreGUI viewA = new BookstoreGUI(eventBus);
+                BookstoreGUI viewA = new BookstoreGUI(eventBus, bookstoreModel);
                 viewA.show();
 
-                BookstoreGUI viewB = new BookstoreGUI(eventBus);
+                BookstoreGUI viewB = new BookstoreGUI(eventBus, bookstoreModel);
                 viewB.show();
             }
         });

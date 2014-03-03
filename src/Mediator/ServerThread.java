@@ -18,7 +18,7 @@ public class ServerThread extends Thread {
 
     public void run(){
         while (true) {
-            if(server.waitForClient(9910, 10)){
+            if(server.waitForClient(mediator.getPort(), 10)){
                 new ObjectEchoWorker(this.mediator, server).start();
             }
         }

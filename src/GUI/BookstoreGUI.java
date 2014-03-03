@@ -54,12 +54,15 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
     private JTextField statusTextField;
 
     private EventBus eventBus;
+    private BookstoreModel bookstoreModel;
 
-    public BookstoreGUI(EventBus eventBus) {
+    public BookstoreGUI(EventBus eventBus, BookstoreModel bookstoreModel) {
         setTitle("Buchhandlung");
 
         this.eventBus = eventBus;
         this.eventBus.register(this);
+
+        this.bookstoreModel = bookstoreModel;
 
         mainPanel = new JPanel(new BorderLayout());
 
@@ -127,6 +130,7 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
 
         initMediatorHostnames();
         mediatorHostnamesComboBox = new JComboBox<>(mediatorHostnames);
+        mediatorHostnamesComboBox.setEditable(true);
         mediatorHostnamesComboBox.setToolTipText("mediator (hostname)");
         mediatorToolBar.add(mediatorHostnamesComboBox);
 
@@ -147,6 +151,7 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
         panel.add(buildMediatorToolBar());
 
         enablePhoneticSearch = new JCheckBox("phoneticSearch",true);
+        enablePhoneticSearch.setEnabled(false);
         panel.add(enablePhoneticSearch);
     }
 
@@ -201,6 +206,7 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
 
     public void initMediatorHostnames() {
         mediatorHostnames = new Vector<String>();
+        mediatorHostnames.add("localhost");
         mediatorHostnames.add("10.10.10.10");
     }
 
@@ -212,6 +218,8 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
     }
 
     public void execute(String query) {
+        bookstoreModel.setServerName(mediatorHostnamesComboBox.getEditor().getItem().toString());
+        bookstoreModel.setServerPort(Integer.parseInt((mediatorPortSpinner.getValue().toString())));
         appendOutputText("execute : " + query);
         eventBus.post(new RequestButtonEvent(new Request(guiID, query)));
     }
@@ -257,10 +265,6 @@ public class BookstoreGUI extends JFrame implements IBookstoreGUI,ActionListener
 
         if (e.getSource() == closeButton)
             close();
-    }
-
-    public static void main(String... args) {
-        BookstoreGUI buchhandlungGUI = new BookstoreGUI(new EventBus());
     }
 
     @Subscribe
