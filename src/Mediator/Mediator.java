@@ -3,6 +3,7 @@ package Mediator;
 import ClientServer.Request;
 import Globals.Book;
 import Globals.MyClassLoader;
+import GuiCommand.*;
 import MethodLinkRepository.MethodLink;
 import MethodLinkRepository.MethodLinkRepository;
 import Persistence.Persistence;

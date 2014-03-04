@@ -1,5 +1,6 @@
+package GuiCommand;
+
 import Globals.Book;
-import Mediator.GuiCommandType;
 
 /**
  * Created by HeierMi on 04.03.14.

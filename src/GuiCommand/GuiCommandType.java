@@ -1,4 +1,4 @@
-package Mediator;
+package GuiCommand;
 
 /**
  * Created by HeierMi on 03.03.14.

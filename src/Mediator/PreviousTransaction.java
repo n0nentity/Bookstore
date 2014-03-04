@@ -1,5 +1,7 @@
 package Mediator;
 
+import GuiCommand.*;
+
 public class PreviousTransaction implements IPreviousTransactionToCareTaker, IPreviousTransactionToOriginator {
     private GuiCommand guiCommand;
 
