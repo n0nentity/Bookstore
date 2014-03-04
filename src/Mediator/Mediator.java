@@ -9,6 +9,8 @@ import Persistence.Persistence;
 import SoftwareRepository.SoftwareRepository;
 import SoftwareRepository.JarMethodLink;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -21,6 +23,7 @@ public class Mediator implements ITransaction {
         serverThread.start();
     }
 
+    private HashMap<String, IPreviousTransactionToCareTaker> undoMap = new HashMap<>();
     private ServerThread serverThread;
     private Integer port = null;
     private MethodLinkRepository methodLinkRepository = new MethodLinkRepository();
@@ -54,7 +57,13 @@ public class Mediator implements ITransaction {
                 // parse and interpret
 
                 Collection<MethodLink> methodLinks = searchResults.values();
+
                 for (MethodLink methodLink : methodLinks) {
+
+                    // update request string for correct function syntax
+                    requestString = requestString.substring(requestString.indexOf("("), requestString.length());
+                    requestString = methodLink.getGuiMethodName() + requestString;
+
                     if (parser.parse(requestString)) {
                         String[] guiFunctionParams = parser.getFunctionParams(requestString);
 
@@ -63,9 +72,9 @@ public class Mediator implements ITransaction {
 
                         Book book = null;
 
-                        if (methodLink.getGuiMethodName().equals(GuiCommand.undo.toString()))
+                        if (methodLink.getGuiMethodName().equals(GuiCommandType.undo.toString()))
                         {
-                            undo();
+                            response = undo(request.getUuid().toString());
                             /*
                             JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
                             //
@@ -73,14 +82,33 @@ public class Mediator implements ITransaction {
                             */
                         }
                         else {
+                            GuiCommand guiCommand = new GuiCommand();
+                            if (methodLink.getGuiMethodName().equals(GuiCommandType.buy.toString()))
+                                guiCommand.setGuiCommandType(GuiCommandType.buy);
+                            if (methodLink.getGuiMethodName().equals(GuiCommandType.sell.toString()))
+                                guiCommand.setGuiCommandType(GuiCommandType.sell);
+                            if (methodLink.getGuiMethodName().equals(GuiCommandType.updateBook.toString()))
+                                guiCommand.setGuiCommandType(GuiCommandType.updateBook);
+                            if (methodLink.getGuiMethodName().equals(GuiCommandType.newBook.toString()))
+                                guiCommand.setGuiCommandType(GuiCommandType.newBook);
+                            if (methodLink.getGuiMethodName().equals(GuiCommandType.drop.toString()))
+                                guiCommand.setGuiCommandType(GuiCommandType.drop);
+                            if (methodLink.getGuiMethodName().equals(GuiCommandType.searchBook.toString()))
+                                guiCommand.setGuiCommandType(GuiCommandType.searchBook);
+
+
                             book = getBookByTitle(guiFunctionParams[0]);
-                            if (methodLink.getGuiMethodName().equals(GuiCommand.newBook.toString()))
+
+                            if (guiCommand.getGuiCommandType() == GuiCommandType.newBook)
                                 book = new Book(null, guiFunctionParams[0], 1);
+
+                            if (book != null)
+                                guiCommand.setBook((Book)book.clone());
 
                             softwareRepoParaTypes = new Class[1];
                             softwareRepoParaValues = new Object[1];
 
-                            if (methodLink.getGuiMethodName().equals(GuiCommand.searchBook.toString())) {
+                            if (guiCommand.getGuiCommandType() == GuiCommandType.searchBook) {
                                 softwareRepoParaTypes[0] = String.class;
                                 softwareRepoParaValues[0] = guiFunctionParams[0];
                             }
@@ -95,26 +123,40 @@ public class Mediator implements ITransaction {
                                 }
                             }
 
-                            if (methodLink.getGuiMethodName().equals("updateBook")) {
+                            if (guiCommand.getGuiCommandType() == GuiCommandType.updateBook) {
                                 book.setTitle(guiFunctionParams[1]);
                             }
 
                             int quantity = 1;
 
-                            if (methodLink.getGuiMethodName().equals(GuiCommand.sell.toString())
-                                    || methodLink.getGuiMethodName().equals(GuiCommand.buy.toString())){
-                                quantity = Integer.parseInt(guiFunctionParams[1]);
+                            if ((guiCommand.getGuiCommandType() == GuiCommandType.sell)
+                                    || (guiCommand.getGuiCommandType() == GuiCommandType.buy)){
+                                quantity = Integer.parseInt(guiFunctionParams[1].trim());
                             }
 
                             while (quantity > 0) {
                                 JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
                                 if (method != null) {
                                     Object result = MyClassLoader.methodFromJar(method.getPath(), method.getClassName().toString(), method.getMethod().getName(), softwareRepoParaTypes, softwareRepoParaValues);
-                                    response = "" + result;
+                                    if (result.getClass().isArray()) {
+                                        Book[] res = (Book[])result;
+                                        response = "search: ";
+                                        for (int i = 0; i < res.length; i++) {
+                                            response += res[i].toString() + ", ";
+                                        }
+                                    }
+                                    else
+                                        response = "" + result.toString();
                                 }
                                 quantity--;
                             }
 
+                            if (guiCommand.getBook() != null) {
+                                IPreviousTransactionToCareTaker previousTransactionToCareTaker = backupLastTransaction(request.getUuid().toString(), guiCommand);
+                                if (undoMap.containsKey(request.getUuid().toString()))
+                                    undoMap.remove(request.getUuid().toString());
+                                undoMap.put(request.getUuid().toString(), previousTransactionToCareTaker);
+                            }
                         }
                     }
                     else {
@@ -132,27 +174,35 @@ public class Mediator implements ITransaction {
         return response;
     }
 
-    private Book book;
-    private GuiCommand guiCommand;
-    private IPreviousTransactionToCareTaker previousTransactionToCareTaker;
-
-    public String undo() {
+    public String undo(String uuid) {
+        IPreviousTransactionToCareTaker previousTransactionToCareTaker = undoMap.get(uuid);
         if (previousTransactionToCareTaker != null) {
-            restorePreviousTransaction(previousTransactionToCareTaker);
+            GuiCommand guiCommand = restorePreviousTransaction(uuid, previousTransactionToCareTaker);
+            if (guiCommand != null) {
+                if (guiCommand.getGuiCommandType() == GuiCommandType.newBook)
+                    Persistence.getInstance().delete(guiCommand.getBook());
+                if (guiCommand.getGuiCommandType() == GuiCommandType.drop)
+                    Persistence.getInstance().insert(guiCommand.getBook());
+                if (guiCommand.getGuiCommandType() == GuiCommandType.buy)
+                    Persistence.getInstance().update(guiCommand.getBook());
+                if (guiCommand.getGuiCommandType() == GuiCommandType.sell)
+                    Persistence.getInstance().update(guiCommand.getBook());
+                if (guiCommand.getGuiCommandType() == GuiCommandType.updateBook)
+                    Persistence.getInstance().update(guiCommand.getBook());
+            }
         }
+        undoMap.remove(uuid);
 
-        previousTransactionToCareTaker = null;
         return " undo";
     }
 
     @Override
-    public IPreviousTransactionToCareTaker backupLastTransaction() {
-        return new PreviousTransaction(book, guiCommand);
+    public IPreviousTransactionToCareTaker backupLastTransaction(String uuid, GuiCommand guiCommand) {
+        return new PreviousTransaction(guiCommand);
     }
 
     @Override
-    public void restorePreviousTransaction(IPreviousTransactionToCareTaker memento) {
-        this.book = ((IPreviousTransactionToOriginator)memento).getBook();
-        this.guiCommand = ((IPreviousTransactionToOriginator)memento).getGuiCommand();
+    public GuiCommand restorePreviousTransaction(String uuid, IPreviousTransactionToCareTaker memento) {
+        return ((IPreviousTransactionToOriginator)memento).getGuiCommand();
     }
 }

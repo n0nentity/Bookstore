@@ -6,7 +6,7 @@ import java.util.UUID;
  * Created by HeierMi on 24.02.14.
  * Book ist charakteristiert durch uuid,title, quantity
  */
-public class Book {
+public class Book implements Cloneable {
     public Book(String uuid, String title, int quantity) {
         this.uuid = uuid;
         this.title = title;
@@ -14,12 +14,12 @@ public class Book {
     }
 
     public Book() {
-
+        //
     }
 
     public String getUuid() {
         if (uuid == null)
-            return UUID.randomUUID().toString();
+            this.uuid = UUID.randomUUID().toString();
         return uuid;
     }
 
@@ -46,6 +46,11 @@ public class Book {
                 ", title='" + title + '\'' +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    @Override
+    public Object clone() {
+        return new Book(this.getUuid(), this.getTitle(), this.getQuantity());
     }
 
     private String uuid = null;

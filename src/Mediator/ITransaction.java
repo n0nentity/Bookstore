@@ -1,6 +1,6 @@
 package Mediator;
 
 public interface ITransaction {
-    public IPreviousTransactionToCareTaker backupLastTransaction();
-    public void restorePreviousTransaction(IPreviousTransactionToCareTaker memento);
+    public IPreviousTransactionToCareTaker backupLastTransaction(String uuid, GuiCommand guiCommand);
+    public GuiCommand restorePreviousTransaction(String uuid, IPreviousTransactionToCareTaker memento);
 }
