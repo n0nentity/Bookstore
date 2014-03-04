@@ -42,7 +42,8 @@ public class Settings implements Serializable {
         return databaseUser;
     }
 
-    public String getDatabasePassword() {
+    @XmlTransient
+    public String DatabasePassword() {
         String result = null;
         try {
             // Decoding String with AES
@@ -88,7 +89,8 @@ public class Settings implements Serializable {
         this.databaseUser = databaseUser;
     }
 
-    public void setDatabasePassword(String databasePassword) {
+    @XmlTransient
+    public void DatabasePassword(String databasePassword) {
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             aes.exEncode(databasePassword, out, internalPassword);

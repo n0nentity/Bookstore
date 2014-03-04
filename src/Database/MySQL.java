@@ -27,7 +27,7 @@ public class MySQL {
                     + ":" + SettingsHandler.getInstance().getSettings().getDatabasePort()
                     + "/" + SettingsHandler.getInstance().getSettings().getDatabaseName()
                     + "?user=" + SettingsHandler.getInstance().getSettings().getDatabaseUser()
-                    + "&password=" + SettingsHandler.getInstance().getSettings().getDatabasePassword()
+                    + "&password=" + SettingsHandler.getInstance().getSettings().DatabasePassword()
                     + "&useUnicode=true&characterEncoding=UTF-8";
             Class.forName("com.mysql.jdbc.Driver");
             this.databaseConnection = DriverManager.getConnection(databaseConnectionURL);

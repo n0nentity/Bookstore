@@ -13,11 +13,15 @@ import java.io.FileOutputStream;
 public class SettingsHandler {
     private static SettingsHandler instance;
 
-    public static Settings getSettings() {
+    public Settings getSettings() {
         return settings;
     }
 
     private static Settings settings;
+
+    public static String getFilePath() {
+        return filePath;
+    }
 
     private static String filePath = "Settings.xml";
 
@@ -35,6 +39,14 @@ public class SettingsHandler {
         }
 
         return instance;
+    }
+
+    public static void write() {
+        try {
+            write(settings, filePath);
+        }
+        catch (Exception e) {
+        }
     }
 
     public static void write(Settings f, String filename) throws Exception{

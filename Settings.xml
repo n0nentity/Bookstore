@@ -7,6 +7,9 @@
   <void property="databaseName">
    <string>book</string>
   </void>
+  <void property="databasePasswordEncrypted">
+   <string>tWWix05TELzxxqw4JJljVA==</string>
+  </void>
   <void property="databasePort">
    <int>3306</int>
   </void>
@@ -15,9 +18,6 @@
   </void>
   <void property="databaseUser">
    <string>book</string>
-  </void>
-  <void property="databasePasswordEncrypted">
-     <string>tWWix05TELzxxqw4JJljVA==</string>
   </void>
  </object>
 </java>
