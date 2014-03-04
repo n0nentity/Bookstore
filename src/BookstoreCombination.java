@@ -10,7 +10,7 @@ import javax.swing.*;
 /**
  * Created by HeierMi on 24.02.14.
  */
-public class Application {
+public class BookstoreCombination {
 
     public static void main(String[] args){
         final EventBus eventBus = new EventBus();

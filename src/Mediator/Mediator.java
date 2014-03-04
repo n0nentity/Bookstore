@@ -9,8 +9,6 @@ import Persistence.Persistence;
 import SoftwareRepository.SoftwareRepository;
 import SoftwareRepository.JarMethodLink;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
