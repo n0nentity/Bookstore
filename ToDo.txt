@@ -1,2 +1,1 @@
 Kompilat erstellen für GUI und Server
-Sind die Jar-Archive digital signiert?
