@@ -22,6 +22,7 @@ public class MethodLinkRepository {
     private Parser parser = new Parser();
     private Mediator mediator;
     private SoftwareRepository softwareRepository = new SoftwareRepository();
+    private Persistence persistence = new Persistence();
 
     public MethodLinkRepository(Mediator mediator) {
         this.mediator = mediator;
@@ -70,7 +71,7 @@ public class MethodLinkRepository {
     }
 
     private Book getBookByTitle(String title) {
-        return Persistence.getInstance().selectByTitle(title);
+        return persistence.selectByTitle(title);
     }
 
     /**

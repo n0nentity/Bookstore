@@ -11,6 +11,7 @@ import java.util.HashMap;
  * Search class
  */
 public class Search {
+    private Persistence persistence = new Persistence();
 
     /**
      * search for Books with overgiven title in database using direct search, regex and soundex
@@ -18,7 +19,7 @@ public class Search {
      * @return
      */
     public Book[] search(String title) {
-        ArrayList<Book> books = Persistence.getInstance().getBooks();
+        ArrayList<Book> books = persistence.getBooks();
 
         BookSearch hashMapSearch = new BookSearch();
 

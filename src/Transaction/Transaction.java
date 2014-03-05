@@ -4,10 +4,12 @@ import Globals.Book;
 import Persistence.Persistence;
 
 public class Transaction {
+    private Persistence persistence = new Persistence();
+
     public String buy(Book book) {
         book.setQuantity(book.getQuantity()+1);
 
-        Persistence.getInstance().update(book);
+        persistence.update(book);
 
         return book + " buy";
     }
@@ -15,7 +17,7 @@ public class Transaction {
     public String sell(Book book) {
         book.setQuantity(book.getQuantity()-1);
 
-        Persistence.getInstance().update(book);
+        persistence.update(book);
 
         return book + " sell";
     }

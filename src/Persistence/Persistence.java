@@ -13,7 +13,6 @@ import java.util.ArrayList;
  * Persistence class
  */
 public class Persistence implements IBookDAO {
-    private static Persistence instance;
     private Connection databaseConnection;
     private PreparedStatement preparedStatement = null;
     private static final String insertSQLStatement = "INSERT INTO book (uuid,title,quantity) VALUES (?,?,?)";
@@ -22,12 +21,6 @@ public class Persistence implements IBookDAO {
     private static final String selectAllSQLStatement = "SELECT uuid,title,quantity FROM book";
     private static final String updateSQLStatement = "UPDATE book SET title = ?, quantity = ? WHERE uuid = ?";
     private static final String deleteSQLStatement = "DELETE FROM book WHERE uuid = ?";
-
-    public static Persistence getInstance() {
-        if (instance == null)
-            instance = new Persistence();
-        return instance;
-    }
 
     /**
      * insert book

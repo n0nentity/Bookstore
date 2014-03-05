@@ -18,6 +18,7 @@ public class Mediator implements ITransaction{
     private ServerThread serverThread;
     private Integer port = null;
     private MethodLinkRepository methodLinkRepository = new MethodLinkRepository(this);
+    private Persistence persistence = new Persistence();
 
 
     public Mediator() {
@@ -45,15 +46,15 @@ public class Mediator implements ITransaction{
             // execute undo functionality
             if (guiCommand != null) {
                 if (guiCommand.getGuiCommandType() == GuiCommandType.newBook)
-                    Persistence.getInstance().delete(guiCommand.getBook());
+                    persistence.delete(guiCommand.getBook());
                 if (guiCommand.getGuiCommandType() == GuiCommandType.drop)
-                    Persistence.getInstance().insert(guiCommand.getBook());
+                    persistence.insert(guiCommand.getBook());
                 if (guiCommand.getGuiCommandType() == GuiCommandType.buy)
-                    Persistence.getInstance().update(guiCommand.getBook());
+                    persistence.update(guiCommand.getBook());
                 if (guiCommand.getGuiCommandType() == GuiCommandType.sell)
-                    Persistence.getInstance().update(guiCommand.getBook());
+                    persistence.update(guiCommand.getBook());
                 if (guiCommand.getGuiCommandType() == GuiCommandType.updateBook)
-                    Persistence.getInstance().update(guiCommand.getBook());
+                    persistence.update(guiCommand.getBook());
                 result = "undo successful: " + guiCommand.getBook();
             }
         }
