@@ -1,5 +1,3 @@
 Kompilat erstellen für GUI und Server
 Funktionen testen
-Nicht gewährleistet: Mediator ist ein Service mit einem Port, der sich
-                     analog zu der GUI mit dem eventBus verbindet.
 Sind die Jar-Archive digital signiert?
