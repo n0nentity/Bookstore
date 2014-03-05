@@ -1,3 +1,5 @@
 Kompilat erstellen für GUI und Server
 Funktionen testen
 Sind die Jar-Archive digital signiert?
+NEIN
+http://docs.oracle.com/javase/tutorial/deployment/jar/signing.html

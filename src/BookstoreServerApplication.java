@@ -3,7 +3,7 @@ import Mediator.Mediator;
 /**
  * Created by HeierMi on 04.03.14.
  */
-public class BookstoreServer {
+public class BookstoreServerApplication {
 
     /**
      * Create a single server
