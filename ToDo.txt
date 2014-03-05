@@ -1,3 +1,2 @@
 Kompilat erstellen für GUI und Server
-Funktionen testen
 Sind die Jar-Archive digital signiert?
