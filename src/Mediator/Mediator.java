@@ -5,6 +5,7 @@ import GuiCommand.*;
 import MethodLinkRepository.MethodLinkRepository;
 import Persistence.Persistence;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -35,10 +36,13 @@ public class Mediator implements ITransaction{
         this.port = port;
     }
 
-    public String undo(String uuid) {
+    public synchronized String undo(String uuid) {
+        String result = null;
         IPreviousTransactionToCareTaker previousTransactionToCareTaker = undoMap.get(uuid);
         if (previousTransactionToCareTaker != null) {
             GuiCommand guiCommand = restorePreviousTransaction(uuid, previousTransactionToCareTaker);
+
+            // execute undo functionality
             if (guiCommand != null) {
                 if (guiCommand.getGuiCommandType() == GuiCommandType.newBook)
                     Persistence.getInstance().delete(guiCommand.getBook());
@@ -50,11 +54,15 @@ public class Mediator implements ITransaction{
                     Persistence.getInstance().update(guiCommand.getBook());
                 if (guiCommand.getGuiCommandType() == GuiCommandType.updateBook)
                     Persistence.getInstance().update(guiCommand.getBook());
+                result = "undo successful: " + guiCommand.getBook();
             }
+        }
+        else {
+            result = "undo not successful: no backup found";
         }
         undoMap.remove(uuid);
 
-        return " undo";
+        return result;
     }
 
     public String request(Request request) {
@@ -65,10 +73,19 @@ public class Mediator implements ITransaction{
     }
 
     public void backupTransaction(String uuid, GuiCommand guiCommand) {
+        // delete other commands for the same book
+        ArrayList<PreviousTransaction> previousTransactionArrayList = new ArrayList(undoMap.values());
+        for (PreviousTransaction previousTransaction : previousTransactionArrayList) {
+           if (previousTransaction.getGuiCommand().getBook().getUuid().equals(guiCommand.getBook().getUuid()))
+                undoMap.remove(previousTransaction.getGuiCommand().getClientUuid());
+        }
+
         IPreviousTransactionToCareTaker previousTransactionToCareTaker = backupLastTransaction(uuid, guiCommand);
         if (undoMap.containsKey(uuid))
             undoMap.remove(uuid);
         undoMap.put(uuid, previousTransactionToCareTaker);
+
+
     }
 
     @Override

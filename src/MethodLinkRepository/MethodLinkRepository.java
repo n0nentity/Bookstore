@@ -129,6 +129,7 @@ public class MethodLinkRepository {
                             if (methodLink.getGuiMethodName().equals(GuiCommandType.searchBook.toString()))
                                 guiCommand.setGuiCommandType(GuiCommandType.searchBook);
 
+                            guiCommand.setClientUuid(request.getUuid().toString());
 
                             book = getBookByTitle(guiFunctionParams[0]);
 

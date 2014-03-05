@@ -9,13 +9,15 @@ import Globals.Book;
 public class GuiCommand {
     private GuiCommandType guiCommandType;
     private Book book;
+    private String clientUuid;
 
     public GuiCommand() {
     }
 
-    public GuiCommand(GuiCommandType guiCommandType, Book book) {
+    public GuiCommand(GuiCommandType guiCommandType, Book book, String clientUuid) {
         this.guiCommandType = guiCommandType;
         this.book = book;
+        this.clientUuid = clientUuid;
     }
 
     public GuiCommandType getGuiCommandType() {
@@ -32,5 +34,13 @@ public class GuiCommand {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public String getClientUuid() {
+        return clientUuid;
+    }
+
+    public void setClientUuid(String clientUuid) {
+        this.clientUuid = clientUuid;
     }
 }

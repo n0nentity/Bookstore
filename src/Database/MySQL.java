@@ -50,6 +50,7 @@ public class MySQL {
     }
 
     public Connection getDatabaseConnection() {
+
         return this.databaseConnection;
     }
 }
