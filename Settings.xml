@@ -2,7 +2,7 @@
 <java version="1.7.0_09" class="java.beans.XMLDecoder">
  <object class="Settings.Settings">
   <void property="databaseHost">
-   <string>10.10.64.190</string>
+   <string>192.168.168.136</string>
   </void>
   <void property="databaseName">
    <string>book</string>
