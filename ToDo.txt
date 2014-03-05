@@ -1,9 +1,7 @@
 Kompilat erstellen für GUI und Server
-Wichtige Funktionen kommentieren
 Funktionen testen
 Transaktionen testen
 Struktur stimmt nicht zu 100% mit vorgabe überein (anmerkungen_komplexaufgabe_buchhandlung.pdf)
 Nicht gewährleistet: Mediator ist ein Service mit einem Port, der sich
                      analog zu der GUI mit dem eventBus verbindet.
 Sind die Jar-Archive digital signiert?
-Jar-Archive in Github hinzufügen

@@ -6,6 +6,7 @@ import javax.print.attribute.standard.Media;
 
 /**
  * Created by HeierMi on 26.02.14.
+ * Server thread
  */
 public class ServerThread extends Thread {
     Mediator mediator;

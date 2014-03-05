@@ -4,6 +4,7 @@ import Globals.Book;
 
 /**
  * Created by HeierMi on 04.03.14.
+ * Represents gui command
  */
 public class GuiCommand {
     private GuiCommandType guiCommandType;

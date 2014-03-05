@@ -1,4 +1,6 @@
-package Mediator;
+package MethodLinkRepository;
+
+import Mediator.FunctionLibrary;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -6,6 +8,7 @@ import java.util.HashMap;
 
 /**
  * Created by root on 24.02.14.
+ * parser class
  */
 public class Parser {
     private HashMap<String,Method> funcs;

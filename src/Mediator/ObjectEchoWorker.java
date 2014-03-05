@@ -8,6 +8,7 @@ import java.net.Socket;
 
 /**
  * Created by HeierMi on 26.02.14.
+ * Thread to execute single request and response
  */
 public class ObjectEchoWorker extends Thread {
     Mediator mediator;

@@ -10,13 +10,18 @@ import java.util.ArrayList;
 
 /**
  * Created by HeierMi on 24.02.14.
- *
- * Persistence bietet die Methoden insert(book) :
- String, update(book) : String, update(book,#) :
- String, delete(book) und select (title) : Book an.
+ * Persistence class
  */
 public class Persistence implements IBookDAO {
     private static Persistence instance;
+    private Connection databaseConnection;
+    private PreparedStatement preparedStatement = null;
+    private static final String insertSQLStatement = "INSERT INTO book (uuid,title,quantity) VALUES (?,?,?)";
+    private static final String selectByTitleSQLStatement = "SELECT uuid,title,quantity FROM book WHERE title = ?";
+    private static final String selectByUuidSQLStatement = "SELECT uuid,title,quantity FROM book WHERE uuid = ?";
+    private static final String selectAllSQLStatement = "SELECT uuid,title,quantity FROM book";
+    private static final String updateSQLStatement = "UPDATE book SET title = ?, quantity = ? WHERE uuid = ?";
+    private static final String deleteSQLStatement = "DELETE FROM book WHERE uuid = ?";
 
     public static Persistence getInstance() {
         if (instance == null)
@@ -24,15 +29,11 @@ public class Persistence implements IBookDAO {
         return instance;
     }
 
-    private Connection databaseConnection;
-    private PreparedStatement preparedStatement = null;
-
-    private static final String insertSQLStatement = "INSERT INTO book (uuid,title,quantity) VALUES (?,?,?)";
-    private static final String selectSQLStatement = "SELECT uuid,title,quantity FROM book WHERE title = ?";
-    private static final String selectAllSQLStatement = "SELECT uuid,title,quantity FROM book";
-    private static final String updateSQLStatement = "UPDATE book SET title = ?, quantity = ? WHERE uuid = ?";
-    private static final String deleteSQLStatement = "DELETE FROM book WHERE uuid = ?";
-
+    /**
+     * insert book
+     * @param book
+     * @return
+     */
     public String insert(Book book) {
         System.out.println("--- insert");
         System.out.println("book : " + book);
@@ -58,13 +59,17 @@ public class Persistence implements IBookDAO {
         //System.out.println("---");
     }
 
+    /**
+     * update book
+     * @param book
+     * @return
+     */
     public String update(Book book) {
         System.out.println("--- update");
         System.out.println("book : " + book);
 
         try {
-            /*
-            if (exists(book)) {
+            if (selectByUuid(book.getUuid()) != null) {
                 databaseConnection = MySQL.getInstance().getDatabaseConnection();
                 databaseConnection.setAutoCommit(false);
                 preparedStatement = databaseConnection.prepareStatement(updateSQLStatement);
@@ -78,16 +83,6 @@ public class Persistence implements IBookDAO {
                 System.out.println("book " + book.getTitle() + " not exists");
                 return "update failed: " + book.getTitle() + " exists";
             }
-            */
-            databaseConnection = MySQL.getInstance().getDatabaseConnection();
-            databaseConnection.setAutoCommit(false);
-            preparedStatement = databaseConnection.prepareStatement(updateSQLStatement);
-            preparedStatement.setString(1,book.getTitle());
-            preparedStatement.setInt(2,book.getQuantity());
-            preparedStatement.setString(3,book.getUuid());
-            preparedStatement.execute();
-            databaseConnection.commit();
-            return "update completed successfully: " + book.getTitle();
         } catch (Exception e) {
             try {
                 databaseConnection.rollback();
@@ -99,6 +94,11 @@ public class Persistence implements IBookDAO {
         }
     }
 
+    /**
+     * delete book
+     * @param book
+     * @return
+     */
     public String delete(Book book) {
         System.out.println("--- delete");
         System.out.println("book : " + book);
@@ -125,17 +125,49 @@ public class Persistence implements IBookDAO {
     }
 
     public boolean exists(String title) {
-        return select(title) != null ? true : false;
+        return selectByTitle(title) != null;
     }
 
-    public Book select(String title) {
+    /**
+     * select book by title
+     * @param title
+     * @return
+     */
+    public Book selectByTitle(String title) {
         Book service = null;
         ResultSet resultSet = null;
 
         try {
             databaseConnection = MySQL.getInstance().getDatabaseConnection();
-            preparedStatement = databaseConnection.prepareStatement(selectSQLStatement);
+            preparedStatement = databaseConnection.prepareStatement(selectByTitleSQLStatement);
             preparedStatement.setString(1,title);
+            preparedStatement.execute();
+            resultSet = preparedStatement.getResultSet();
+            if (resultSet != null && resultSet.next()) {
+                service = new Book(resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return service;
+    }
+
+    /**
+     * select book by uuid
+     * @param uuid
+     * @return
+     */
+    public Book selectByUuid(String uuid) {
+        Book service = null;
+        ResultSet resultSet = null;
+
+        try {
+            databaseConnection = MySQL.getInstance().getDatabaseConnection();
+            preparedStatement = databaseConnection.prepareStatement(selectByUuidSQLStatement);
+            preparedStatement.setString(1,uuid);
             preparedStatement.execute();
             resultSet = preparedStatement.getResultSet();
             if (resultSet != null && resultSet.next()) {

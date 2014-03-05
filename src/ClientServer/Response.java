@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 /**
  * Created by HeierMi on 26.02.14.
+ * Represents a response from server
  */
 public class Response implements Serializable {
     public Response() {

@@ -9,21 +9,12 @@ import java.io.FileOutputStream;
 
 /**
  * Created by HeierMi on 24.02.14.
+ * SettingsHandler with SingleTon to get global settings
  */
 public class SettingsHandler {
     private static SettingsHandler instance;
-
-    public Settings getSettings() {
-        return settings;
-    }
-
-    private static Settings settings;
-
-    public static String getFilePath() {
-        return filePath;
-    }
-
     private static String filePath = "Settings.xml";
+    private static Settings settings;
 
     private SettingsHandler() {}
 
@@ -41,6 +32,17 @@ public class SettingsHandler {
         return instance;
     }
 
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public static String getFilePath() {
+        return filePath;
+    }
+
+    /**
+     * write settings in file
+     */
     public static void write() {
         try {
             write(settings, filePath);
@@ -49,6 +51,12 @@ public class SettingsHandler {
         }
     }
 
+    /**
+     * write specific Settings object f in filename param
+     * @param f
+     * @param filename
+     * @throws Exception
+     */
     public static void write(Settings f, String filename) throws Exception{
         XMLEncoder encoder =
                 new XMLEncoder(
@@ -58,6 +66,12 @@ public class SettingsHandler {
         encoder.close();
     }
 
+    /**
+     * read settings from filename param
+     * @param filename
+     * @return
+     * @throws Exception
+     */
     public static Settings read(String filename) throws Exception {
         XMLDecoder decoder =
                 new XMLDecoder(new BufferedInputStream(

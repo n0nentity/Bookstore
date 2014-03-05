@@ -10,9 +10,7 @@ import java.io.*;
 
 /**
  * Created by HeierMi on 24.02.14.
- * Konfigurationsdatei mit den
- Parametern port, databaseType, databaseUser
- und (AES-verschlüsseltem) databasePassword.
+ * Configuration with port, databaseType, databaseUser and AES databasePassword
  */
 public class Settings implements Serializable {
     private String databaseHost = "localhost";

@@ -8,6 +8,11 @@ import javax.swing.*;
  * Created by HeierMi on 04.03.14.
  */
 public class BookstoreGUI {
+
+    /**
+     * Generate a single GUI
+     * @param args
+     */
     public static void main(String[] args){
         final EventBus eventBus = new EventBus();
 

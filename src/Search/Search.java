@@ -8,8 +8,15 @@ import java.util.HashMap;
 
 /**
  * Created by HeierMi on 24.02.14.
+ * Search class
  */
 public class Search {
+
+    /**
+     * search for Books with overgiven title in database using direct search, regex and soundex
+     * @param title
+     * @return
+     */
     public Book[] search(String title) {
         ArrayList<Book> books = Persistence.getInstance().getBooks();
 

@@ -2,8 +2,12 @@ package MethodLinkRepository;
 
 /**
  * Created by HeierMi on 26.02.14.
+ * Represents a method link from gui to internal structure
  */
 public class MethodLink {
+    private String guiMethodComplete;
+    private String linkMethodComplete;
+
     public MethodLink() {
     }
 
@@ -11,9 +15,6 @@ public class MethodLink {
         this.guiMethodComplete = guiMethodComplete;
         this.linkMethodComplete = linkMethodComplete;
     }
-
-    private String guiMethodComplete;
-    private String linkMethodComplete;
 
     public String getLinkMethodComplete() {
         return linkMethodComplete;

@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 /**
  * Created by HeierMi on 24.02.14.
+ * Software repository including directory watcher
  */
 public class SoftwareRepository implements IDirectoryObserver {
     public SoftwareRepository() {
@@ -30,6 +31,9 @@ public class SoftwareRepository implements IDirectoryObserver {
         return methods;
     }
 
+    /**
+     * load methods from all jar archives in lib path
+     */
     private void loadMethods() {
         File folder = new File(libPath);
         File[] listOfFiles = folder.listFiles();
@@ -44,6 +48,10 @@ public class SoftwareRepository implements IDirectoryObserver {
         }
     }
 
+    /**
+     * load methods of single jar archive
+     * @param path
+     */
     private void loadMethods(String path) {
         ArrayList<Class> classes = MyClassLoader.loadClassesFromJar(path);
         if (classes != null) {
@@ -53,6 +61,11 @@ public class SoftwareRepository implements IDirectoryObserver {
         }
     }
 
+    /**
+     * load methods of a single class in a single jar archive
+     * @param path
+     * @param className
+     */
     private void loadMethods(String path, String className) {
         ArrayList<Method> result = MyClassLoader.methodsFromJar(path, className);
         for (Method method : result) {
@@ -69,6 +82,9 @@ public class SoftwareRepository implements IDirectoryObserver {
     }
 
     @Override
+    /**
+     * directory watch
+     */
     public void update(String action, String filename) {
         ArrayList<JarMethodLink> arrayList = new ArrayList<>(methods.values());
         for (JarMethodLink jarMethodLink : arrayList) {

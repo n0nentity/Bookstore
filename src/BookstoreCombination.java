@@ -12,6 +12,10 @@ import javax.swing.*;
  */
 public class BookstoreCombination {
 
+    /**
+     * Create a server and two GUIs
+     * @param args
+     */
     public static void main(String[] args){
         final EventBus eventBus = new EventBus();
         Mediator mediator = new Mediator();

@@ -4,8 +4,13 @@ import java.lang.reflect.Method;
 
 /**
  * Created by HeierMi on 26.02.14.
+ * Class to storage a method in software repository
  */
 public class JarMethodLink {
+    private String path;
+    private String className;
+    private Method method;
+
     public JarMethodLink() {
     }
 
@@ -14,11 +19,6 @@ public class JarMethodLink {
         this.className = className;
         this.method = method;
     }
-
-    private String path;
-    private String className;
-    private Method method;
-
 
     public String getPath() {
         return path;

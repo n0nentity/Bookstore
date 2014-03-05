@@ -7,7 +7,8 @@ import Globals.Book;
  */
 public interface IBookDAO {
     public String insert(Book book);
-    public Book select(String uuid);
+    public Book selectByTitle(String title);
+    public Book selectByUuid(String uuid);
     public String update(Book book);
     public String delete(Book book);
 }
