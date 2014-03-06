@@ -1,1 +1,0 @@
-Kompilat erstellen für GUI und Server

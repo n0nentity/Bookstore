@@ -2,10 +2,13 @@
 <java version="1.7.0_09" class="java.beans.XMLDecoder">
  <object class="Settings.Settings">
   <void property="databaseHost">
-   <string>db516629543.db.1and1.com</string>
+   <string>192.168.168.136</string>
   </void>
   <void property="databaseName">
-   <string>db516629543</string>
+   <string>book</string>
+  </void>
+  <void property="databasePasswordEncrypted">
+   <string>tWWix05TELzxxqw4JJljVA==</string>
   </void>
   <void property="databasePort">
    <int>3306</int>
@@ -14,10 +17,7 @@
    <string>MySQL</string>
   </void>
   <void property="databaseUser">
-   <string>dbo516629543</string>
-  </void>
-  <void property="databasePasswordEncrypted">
-     <string>qUkkLZkRcGN6RcF4uCBdaQ==</string>
+   <string>book</string>
   </void>
  </object>
 </java>
