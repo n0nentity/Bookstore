@@ -64,16 +64,18 @@ public class MyClassLoader extends java.lang.ClassLoader {
             //searching for the class
             for(Map.Entry<String,ByteArrayOutputStream> e : hmBuffer.entrySet()){
 
-                if(e.getKey().contains(className.substring(0, className.indexOf("."))+".class")) {
-                    String name = e.getKey().substring(e.getKey().lastIndexOf("/")+1, e.getKey().indexOf("."));
-                    className = name + "." + name;
+                if(e.getKey().contains(className.substring(className.indexOf(".")+1)+".class")) {
+                    String name = e.getKey().substring(e.getKey().lastIndexOf("/") + 1, e.getKey().indexOf("."));
+                    String packageNameSubPath = e.getKey().substring(0,e.getKey().lastIndexOf("/"));
+                    String packageName = packageNameSubPath.substring(packageNameSubPath.lastIndexOf("/")+1,packageNameSubPath.length());
+                    className = packageName + "." + name;
 
                     classData = e.getValue().toByteArray();
                 }
             }
             return defineClass(className,classData,0,classData.length);
         } catch (ClassFormatError e) { e.printStackTrace();}
-          catch (NullPointerException e) { e.printStackTrace();}
+        catch (NullPointerException e) { e.printStackTrace();}
 
         throw new ClassNotFoundException();
     }
@@ -89,13 +91,16 @@ public class MyClassLoader extends java.lang.ClassLoader {
                         classData = e.getValue().toByteArray();
                         try {
                             String name = e.getKey().substring(e.getKey().lastIndexOf("/")+1, e.getKey().indexOf("."));
-                            name = name + "." + name;
+                            String packageNameSubPath = e.getKey().substring(0,e.getKey().lastIndexOf("/"));
+                            String packageName = packageNameSubPath.substring(packageNameSubPath.lastIndexOf("/")+1,packageNameSubPath.length());
+                            name = packageName + "." + name;
                             /*
                             String name = e.getKey();
                             */
                             /*
                             String name = e.getKey().substring(0, e.getKey().indexOf("."));
                             */
+                            //Class c = defineClass(name, classData, 0, classData.length);
                             Class c = defineClass(name, classData, 0, classData.length);
                             result.add(c);
                         }
@@ -110,7 +115,7 @@ public class MyClassLoader extends java.lang.ClassLoader {
         }
         return result;
     }
-      
+
     public static ArrayList<Class> loadClassesFromJar(String path) {
         ArrayList<Class> result = null;
 
