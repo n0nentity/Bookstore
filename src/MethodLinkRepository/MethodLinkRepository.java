@@ -169,6 +169,15 @@ public class MethodLinkRepository {
                                 quantity = Integer.parseInt(guiFunctionParams[1].trim());
                             }
 
+                            // check for correct quantity
+                            if (guiCommand.getGuiCommandType() == GuiCommandType.sell) {
+                                int diff = book.getQuantity() - quantity;
+                                if (diff < 0) {
+                                    response = "sell: not enough books available " + book + " diff:" + diff;
+                                    break;
+                                }
+                            }
+
                             while (quantity > 0) {
                                 JarMethodLink method = softwareRepository.getMethods().get(methodLink.getLinkMethodName());
                                 if (method != null) {
